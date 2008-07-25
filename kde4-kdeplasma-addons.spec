@@ -11,6 +11,7 @@ License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 # Source0-md5:	c67db067de416209fd63ff0deea44510
+Patch0:		%{name}-bluemarble.patch
 URL:		http://www.kde.org
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
@@ -36,6 +37,7 @@ Plazmoidy dla KDE4.
 
 %prep
 %setup -q -n %{orgname}-%{version}
+%patch0 -p0
 
 %build
 install -d build
