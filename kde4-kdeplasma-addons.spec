@@ -11,6 +11,7 @@ License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 # Source0-md5:	c67db067de416209fd63ff0deea44510
+URL:		http://www.kde.org
 BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	QtCore-devel >= %{_qtver}
