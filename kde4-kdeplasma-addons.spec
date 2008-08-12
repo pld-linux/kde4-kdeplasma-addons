@@ -13,11 +13,11 @@ Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version
 # Source0-md5:	c67db067de416209fd63ff0deea44510
 Patch0:		%{name}-bluemarble.patch
 URL:		http://www.kde.org/
-BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
+BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel >= %{_qtver}
-BuildRequires:	QtOpenGL-devel >= %{_qtver}
 BuildRequires:	QtNetwork-devel >= %{_qtver}
+BuildRequires:	QtOpenGL-devel >= %{_qtver}
 BuildRequires:	QtSvg-devel >= %{_qtver}
 BuildRequires:	automoc4 >= 0.9.83
 BuildRequires:	cmake
