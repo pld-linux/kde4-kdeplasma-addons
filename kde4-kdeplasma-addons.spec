@@ -17,6 +17,8 @@ BuildRequires:	OpenGL-devel
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	QtCore-devel >= %{_qtver}
 BuildRequires:	QtOpenGL-devel >= %{_qtver}
+BuildRequires:	QtNetwork-devel >= %{_qtver}
+BuildRequires:	QtSvg-devel >= %{_qtver}
 BuildRequires:	automoc4 >= 0.9.83
 BuildRequires:	cmake
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
@@ -26,6 +28,8 @@ BuildRequires:	phonon-devel >= 4.1.83
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
+BuildRequires:	strigi-devel
+BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
