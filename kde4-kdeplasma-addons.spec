@@ -15,7 +15,9 @@ URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	QtCore-devel >= %{_qtver}
+BuildRequires:	QtNetwork-devel >= %{_qtver}
 BuildRequires:	QtOpenGL-devel >= %{_qtver}
+BuildRequires:	QtSvg-devel >= %{_qtver}
 BuildRequires:	automoc4 >= 0.9.84
 BuildRequires:	cmake >= 2.6.0
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
@@ -25,6 +27,8 @@ BuildRequires:	phonon-devel >= 4.2.0
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
+BuildRequires:	strigi-devel >= 0.5.12
+BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
 
