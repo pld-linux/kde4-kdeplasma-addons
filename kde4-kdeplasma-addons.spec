@@ -5,12 +5,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.1.62
+Version:	4.1.63
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	645198b2413bfcc266320c3af398cf7c
+# Source0-md5:	7caea8f7ce3cd378f962f520c32de240
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -103,9 +103,9 @@ rm -rf $RPM_BUILD_ROOT
 %files lancelot
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/lancelot
-%attr(755,root,root) %{_bindir}/lancelot-test
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
+%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
