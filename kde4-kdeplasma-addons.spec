@@ -5,12 +5,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.1.63
+Version:	4.1.64
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	7caea8f7ce3cd378f962f520c32de240
+# Source0-md5:	eddce2488643b08a62f6484a012e568b
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -83,6 +83,7 @@ rm -rf $RPM_BUILD_ROOT
 %files
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/kde4/krunner_*.so
+%attr(755,root,root) %{_libdir}/kde4/kcm_krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_comic_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_engine_*.so
@@ -107,5 +108,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
+%{_datadir}/mime/packages/lancelotpart-mime.xml
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
 %{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
