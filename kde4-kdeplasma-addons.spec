@@ -104,9 +104,13 @@ rm -rf $RPM_BUILD_ROOT
 %files lancelot
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_bindir}/lancelot
+%attr(755,root,root) %{_bindir}/lancelot-test
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libplasmaconverter.so.?
+%attr(755,root,root) %{_libdir}/libplasmaconverter.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
+%{_datadir}/apps/plasma/services/tweet.operations
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
