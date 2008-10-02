@@ -93,7 +93,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Elegance
 %{_datadir}/apps/desktoptheme/Silicon
+%dir %{_datadir}/apps/desktoptheme/default/stylesheets
 %{_datadir}/apps/desktoptheme/default/stylesheets/*
+%dir %{_datadir}/apps/desktoptheme/default/weatherstation
 %{_datadir}/apps/desktoptheme/default/weatherstation/*
 %{_datadir}/apps/desktoptheme/default/widgets/*
 %{_datadir}/apps/desktoptheme/heron
