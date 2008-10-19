@@ -90,7 +90,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_packagestructure_comic.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmacomicprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so.*.*.*
-%dir %{_datadir}/apps/desktoptheme
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Elegance
 %{_datadir}/apps/desktoptheme/Silicon
