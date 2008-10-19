@@ -105,6 +105,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/*.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+%{_datadir}/config/comic.knsrc
 
 %files lancelot
 %defattr(644,root,root,755)
