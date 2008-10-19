@@ -115,6 +115,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/libplasmaconverter.so.?
 %attr(755,root,root) %{_libdir}/libplasmaconverter.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
+%dir %{_datadir}/apps/plasma
 %dir %{_datadir}/apps/plasma/services
 %{_datadir}/apps/plasma/services/tweet.operations
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
