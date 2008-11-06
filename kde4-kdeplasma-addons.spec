@@ -11,6 +11,7 @@ License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 # Source0-md5:	20e386df892b1197e910ed9871622847
+Patch0:		%{name}-lancelot.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -52,6 +53,7 @@ Motyw dla pulpitu Lancelot.
 
 %prep
 %setup -q -n %{orgname}-%{version}
+%patch0	-p0
 
 %build
 install -d build
@@ -124,14 +126,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/bball/football.svg
 %{_datadir}/apps/plasma/services/tweet.operations
 
-#%files lancelot
-#%defattr(644,root,root,755)
-#%attr(755,root,root) %{_bindir}/lancelot
-#%attr(755,root,root) %{_bindir}/lancelot-test
-#%attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
-#%attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
-#%{_datadir}/apps/desktoptheme/default/lancelot
-#%{_datadir}/dbus-1/services/org.kde.lancelot.service
-#%{_datadir}/mime/packages/lancelotpart-mime.xml
-#%{_iconsdir}/hicolor/*x*/apps/lancelot.png
-#%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
+%files lancelot
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/lancelot
+%attr(755,root,root) %{_bindir}/lancelot-test
+%attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
+%attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
+%{_datadir}/apps/desktoptheme/default/lancelot
+%{_datadir}/dbus-1/services/org.kde.lancelot.service
+%{_datadir}/mime/packages/lancelotpart-mime.xml
+%{_iconsdir}/hicolor/*x*/apps/lancelot.png
+%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
