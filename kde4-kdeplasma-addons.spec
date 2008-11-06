@@ -1,16 +1,16 @@
 %define		orgname	kdeplasma-addons
 %define		_state	unstable
-%define		_qtver	4.4.1
+%define		_qtver	4.4.3
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.1.71
+Version:	4.1.72
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	3856aaccf652905ba63c9632b34cdc8c
+# Source0-md5:	20e386df892b1197e910ed9871622847
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -90,6 +90,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_packagestructure_comic.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmacomicprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libplasmaconverter.so.?
+%attr(755,root,root) %{_libdir}/libplasmaconverter.so.*.*.*
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Elegance
 %{_datadir}/apps/desktoptheme/Silicon
@@ -100,8 +102,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/widgets/*
 %{_datadir}/apps/desktoptheme/heron
 %{_datadir}/apps/desktoptheme/slim-glow
-%{_datadir}/apps/plasma-bluemarble
-%{_datadir}/apps/plasma-comic
+#%{_datadir}/apps/plasma-bluemarble
+#%{_datadir}/apps/plasma-comic
 %{_datadir}/kde4/services/*.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
@@ -120,20 +122,16 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/bball/bball.svg
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svg
-
-%files lancelot
-%defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/lancelot
-%attr(755,root,root) %{_bindir}/lancelot-test
-%attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
-%attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libplasmaconverter.so.?
-%attr(755,root,root) %{_libdir}/libplasmaconverter.so.*.*.*
-%{_datadir}/apps/desktoptheme/default/lancelot
-%dir %{_datadir}/apps/plasma
-%dir %{_datadir}/apps/plasma/services
 %{_datadir}/apps/plasma/services/tweet.operations
-%{_datadir}/dbus-1/services/org.kde.lancelot.service
-%{_datadir}/mime/packages/lancelotpart-mime.xml
-%{_iconsdir}/hicolor/*x*/apps/lancelot.png
-%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
+
+#%files lancelot
+#%defattr(644,root,root,755)
+#%attr(755,root,root) %{_bindir}/lancelot
+#%attr(755,root,root) %{_bindir}/lancelot-test
+#%attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
+#%attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
+#%{_datadir}/apps/desktoptheme/default/lancelot
+#%{_datadir}/dbus-1/services/org.kde.lancelot.service
+#%{_datadir}/mime/packages/lancelotpart-mime.xml
+#%{_iconsdir}/hicolor/*x*/apps/lancelot.png
+#%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
