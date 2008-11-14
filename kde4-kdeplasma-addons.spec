@@ -5,12 +5,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.1.72
+Version:	4.1.73
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	20e386df892b1197e910ed9871622847
+# Source0-md5:	059989a7dc4acc0903408929c2419421
 Patch0:		%{name}-lancelot.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -20,7 +20,7 @@ BuildRequires:	QtNetwork-devel >= %{_qtver}
 BuildRequires:	QtOpenGL-devel >= %{_qtver}
 BuildRequires:	QtSvg-devel >= %{_qtver}
 BuildRequires:	automoc4 >= 0.9.84
-BuildRequires:	cmake >= 2.6.1-2
+BuildRequires:	cmake >= 2.6.2
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
