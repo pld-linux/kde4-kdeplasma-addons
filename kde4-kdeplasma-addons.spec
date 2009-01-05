@@ -9,7 +9,7 @@ Version:	4.1.87
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
-Source0:	ftp://ftp.pbone.net/mirror/ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
+Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 # Source0-md5:	edf55b8d66fd7b6945d607bc86eeae92
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
