@@ -26,11 +26,11 @@ BuildRequires:	cmake >= 2.6.2
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-BuildRequires:	phonon-devel >= 4.2.80
+BuildRequires:	phonon-devel >= 4.2.96
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
-BuildRequires:	strigi-devel >= 0.5.12
+BuildRequires:	strigi-devel >= 0.6.3
 BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
