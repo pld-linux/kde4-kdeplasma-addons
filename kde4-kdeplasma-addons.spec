@@ -6,7 +6,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.2.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
@@ -21,7 +21,7 @@ BuildRequires:	QtOpenGL-devel >= %{_qtver}
 BuildRequires:	QtScript-devel >= %{_qtver}
 BuildRequires:	QtSvg-devel >= %{_qtver}
 BuildRequires:	QtWebKit-devel >= %{_qtver}
-BuildRequires:	automoc4 >= 0.9.84
+BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.6.2
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
