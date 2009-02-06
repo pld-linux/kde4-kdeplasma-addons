@@ -43,7 +43,7 @@ Plazmoidy dla KDE4.
 
 %package lancelot
 Summary:	Lancelot Desktop Theme
-Summary(pl.UTF-8):	Motyw dla pulpitu Lancelot
+Summary(pl.UTF-8):	Motyw pulpitu Lancelot
 Group:		X11/Applications
 Requires:	kde4-kdebase-workspace >= %{version}
 
@@ -51,7 +51,7 @@ Requires:	kde4-kdebase-workspace >= %{version}
 Lancelot Desktop Theme.
 
 %description lancelot -l pl.UTF-8
-Motyw dla pulpitu Lancelot.
+Motyw pulpitu Lancelot.
 
 %prep
 %setup -q -n %{orgname}-%{version}
