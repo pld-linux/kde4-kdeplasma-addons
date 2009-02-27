@@ -5,12 +5,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.2.0
-Release:	5
+Version:	4.2.1
+Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	d98f805f4c9b7af7278067f9e544b2ec
+# Source0-md5:	55219414d52924cb22ea2953cd2ae78b
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -26,7 +26,7 @@ BuildRequires:	cmake >= 2.6.2
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-BuildRequires:	phonon-devel >= 4.3.0
+BuildRequires:	phonon-devel >= 4.3.1
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
@@ -125,6 +125,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/bball/bball.svgz
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
+%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma/services/tweet.operations
 
 %files lancelot
