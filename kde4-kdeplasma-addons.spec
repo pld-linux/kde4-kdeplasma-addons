@@ -1,16 +1,17 @@
 %define		orgname	kdeplasma-addons
 %define		_state	stable
-%define		_qtver	4.4.3
+%define		_qtver	4.5
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.2.1
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 # Source0-md5:	55219414d52924cb22ea2953cd2ae78b
+Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -55,6 +56,7 @@ Motyw pulpitu Lancelot.
 
 %prep
 %setup -q -n %{orgname}-%{version}
+%patch100 -p0
 %patch0 -p1
 
 %build
