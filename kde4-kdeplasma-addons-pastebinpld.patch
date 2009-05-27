@@ -1,13 +1,11 @@
-diff -ur kdeplasma-addons-4.2.87svn969966/applets/pastebin/backends/pastebincom.cpp kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends/pastebincom.cpp
---- kdeplasma-addons-4.2.87svn969966/applets/pastebin/backends/pastebincom.cpp	2009-02-26 10:13:10.000000000 +0100
-+++ kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends/pastebincom.cpp	2009-05-26 23:35:14.059626384 +0200
-@@ -25,7 +25,7 @@
- PastebinCOMServer::PastebinCOMServer(KConfigGroup config)
-     : PastebinServer()
+--- kdeplasma-addons-4.1.81/applets/pastebin/backends/pastebincom.cpp~	2008-10-23 02:04:10.000000000 +0300
++++ kdeplasma-addons-4.1.81/applets/pastebin/backends/pastebincom.cpp	2008-12-07 02:09:15.544630827 +0200
+@@ -24,7 +24,7 @@
+ 
+ PastebinCOMServer::PastebinCOMServer()
+     : PastebinServer(),
+-      m_server("http://pastebin.com")
++      m_server("http://pld.pastebin.com")
  {
--    m_server = config.readEntry("pastebincom", "http://pastebin.com");
-+    m_server = config.readEntry("pld.pastebincom", "http://pld.pastebin.com");
  }
  
- PastebinCOMServer::~PastebinCOMServer()
-Tylko w kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends: pastebincom.cpp~
