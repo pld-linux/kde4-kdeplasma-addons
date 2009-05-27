@@ -1,16 +1,18 @@
 %define		orgname	kdeplasma-addons
-%define		_state	stable
+%define		_state	unstable
 %define		_qtver	4.5.0
+%define		svn	969966
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.2.3
-Release:	3
+Version:	4.2.87
+Release:	1
 License:	GPL v2
 Group:		X11/Applications
-Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	7f29b7dbb46b5b468fd7867e4907e858
+Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}svn%{svn}.tar.bz2
+# Source0-md5:	e129e00b98e54b9ebc24048f49042570
+#Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -25,6 +27,7 @@ BuildRequires:	QtWebKit-devel >= %{_qtver}
 BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.6.3
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
+BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
 BuildRequires:	phonon-devel >= 4.3.1
@@ -55,7 +58,7 @@ Lancelot Desktop Theme.
 Motyw pulpitu Lancelot.
 
 %prep
-%setup -q -n %{orgname}-%{version}
+%setup -q -n %{orgname}-%{version}svn%{svn}
 #%patch100 -p0
 %patch0 -p1
 
@@ -70,7 +73,7 @@ cd build
 %endif
 	../
 
-%{__make}
+%{__make} -j1
 
 %install
 rm -rf $RPM_BUILD_ROOT
