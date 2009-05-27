@@ -100,8 +100,29 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_packagestructure_comic.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmacomicprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so.*.*.*
-%attr(755,root,root) %ghost %{_libdir}/libplasmaconverter.so.?
-%attr(755,root,root) %{_libdir}/libplasmaconverter.so.*.*.*
+%attr(755,root,root) %{_libdir}/kde4/plasma-applet_systemloadviewer.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_apodprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_epodprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_flickrprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_oseiprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
+%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
+%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
+%attr(755,root,root) %{_libdir}/liblancelot.so
+%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
+%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
+%attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
+%attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
+%attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/libplasmaweather.so.?
+%attr(755,root,root) %{_libdir}/libplasmaweather.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/librtm.so.?
+%attr(755,root,root) %{_libdir}/librtm.so.*.*.*
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Elegance
 %{_datadir}/apps/desktoptheme/Silicon
@@ -114,6 +135,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/slim-glow
 %{_datadir}/kde4/services/*.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
+%{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 #%{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
 %{_datadir}/config/comic.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
@@ -131,7 +153,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
 %{_datadir}/apps/plasma-bluemarble
-%{_datadir}/apps/plasma/services/tweet.operations
+%{_datadir}/apps/plasma
+%{_datadir}/apps/plasma-applet-opendesktop
+%{_datadir}/apps/plasma_pastebin
+%{_datadir}/apps/plasma_wallpaper_pattern
 
 %files lancelot
 %defattr(644,root,root,755)
@@ -141,5 +166,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/lancelot
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
+%{_datadir}/apps/lancelot
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
 %{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
