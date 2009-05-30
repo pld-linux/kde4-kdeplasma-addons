@@ -1,19 +1,19 @@
 %define		orgname	kdeplasma-addons
 %define		_state	unstable
 %define		_qtver	4.5.0
-%define		svn	969966
+%define		svn	973768
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.2.87
+Version:	4.2.88
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}svn%{svn}.tar.bz2
-# Source0-md5:	e129e00b98e54b9ebc24048f49042570
+# Source0-md5:	6b50f5d33345646352d3e9503357ccc2
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-#Patch100:	%{name}-branch.diff
+#Patch100: %{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -130,23 +130,29 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/stylesheets/*
 %dir %{_datadir}/apps/desktoptheme/default/weatherstation
 %{_datadir}/apps/desktoptheme/default/weatherstation/*
+%dir %{_datadir}/apps/desktoptheme/default/weather/
+%{_datadir}/apps/desktoptheme/default/weather/wind-arrows.svgz
 %{_datadir}/apps/desktoptheme/default/widgets/*
 %{_datadir}/apps/desktoptheme/heron
 %{_datadir}/apps/desktoptheme/slim-glow
 %{_datadir}/kde4/services/*.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
-#%{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
 %{_datadir}/config/comic.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/left.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/right.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/rssnow.svgz
+%dir %{_datadir}/apps/desktoptheme/default/bubblemon
+%{_datadir}/apps/desktoptheme/default/bubblemon/bubble.svg
+%dir %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
+%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/greensquare.svgz
+%{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
 %{_iconsdir}/*/*x*/apps/previewer.png
-#%{_iconsdir}/oxygen/scalable/apps/bball.svgz
 %{_datadir}/kde4/services/ServiceMenus/preview.desktop
 %dir %{_datadir}/apps/bball
 %{_datadir}/apps/bball/bball.svgz
@@ -164,6 +170,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
+%{_datadir}/apps/desktoptheme/air/
+
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
 %{_datadir}/apps/lancelot
