@@ -58,6 +58,24 @@ Lancelot Desktop Theme.
 %description lancelot -l pl.UTF-8
 Motyw pulpitu Lancelot.
 
+%package devel
+Summary:	Development files for KDE4 Plasmoids
+Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek plazmoidów dla KDE4
+Group:		X11/Development/Libraries
+Requires:	%{name} = %{version}-%{release}
+Requires:	kde4-kdebase-workspace-devel >= %{version}-%{release}
+Requires:	kde4-kdegraphics-devel >= %{version}-%{release}
+Requires:	kde4-kdelibs-devel >= %{version}-%{release}
+Requires:	kde4-kdepimlibs-devel >= %{version}-%{release}
+
+%description devel
+This package contains header files needed if you wish to build
+applications based on KDE4 Plasmoids.
+
+%description devel -l pl.UTF-8
+Pakiet ten zawiera pliki nagłówkowe potrzebne do budowy aplikacji
+opartych na plazmoidach dla KDE4.
+
 %prep
 %setup -q -n %{orgname}-%{version}svn%{svn}
 #%patch100 -p0
@@ -140,6 +158,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 %{_datadir}/config/comic.knsrc
+%{_datadir}/config/virus_wallpaper.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/left.svgz
@@ -178,3 +197,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/lancelot
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
 %{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
+
+%files devel
+%defattr(644,root,root,755)
+%attr(755,root,root) %{_libdir}/*.so
+%{_includedir}/conversion
+%{_includedir}/lancelot
+%{_datadir}/apps/cmake/modules/*.cmake
