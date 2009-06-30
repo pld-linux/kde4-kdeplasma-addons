@@ -6,12 +6,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.2.91
+Version:	4.2.95
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
-Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}svn%{svn}.tar.bz2
-# Source0-md5:	fe96b5e958756b27f5b8d7a11d251fe9
+Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
+# Source0-md5:	f39f498ad5f9434ff99fa48209fa0b59
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 #Patch100: %{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
@@ -77,7 +77,7 @@ Pakiet ten zawiera pliki nagłówkowe potrzebne do budowy aplikacji
 opartych na plazmoidach dla KDE4.
 
 %prep
-%setup -q -n %{orgname}-%{version}svn%{svn}
+%setup -q -n %{orgname}-%{version}
 #%patch100 -p0
 %patch0 -p1
 
@@ -126,7 +126,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_oseiprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
+#%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
@@ -178,7 +178,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/bball/bball.svgz
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
-%{_datadir}/apps/plasma-bluemarble
+#%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma
 %{_datadir}/apps/plasma-applet-opendesktop
 %{_datadir}/apps/plasma_pastebin
