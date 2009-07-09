@@ -6,12 +6,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.2.95
+Version:	4.2.96
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	f39f498ad5f9434ff99fa48209fa0b59
+# Source0-md5:	bfb975facc9993c99c773940579b89e1
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 #Patch100: %{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
@@ -191,7 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
-%{_datadir}/apps/desktoptheme/air/
+#%{_datadir}/apps/desktoptheme/air/
 
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
