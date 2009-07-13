@@ -36,6 +36,9 @@ BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
 BuildRequires:	strigi-devel >= 0.6.3
+BuildRequires:	xorg-lib-libXcomposite
+BuildRequires:	xorg-lib-libXdamage
+BuildRequires:	xorg-lib-libXrender
 BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
