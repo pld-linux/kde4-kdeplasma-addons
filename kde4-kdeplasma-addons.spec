@@ -1,3 +1,6 @@
+
+%bcond_without	marble	# don't build marble plasma support
+
 %define		orgname	kdeplasma-addons
 %define		_state	unstable
 %define		_qtver	4.5.2
@@ -31,7 +34,7 @@ BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-BuildRequires:	marble-devel >= 0.7.1
+%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	phonon-devel >= 4.3.1
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
@@ -131,7 +134,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_oseiprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
+%if %{with marble}
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
+%endif
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
