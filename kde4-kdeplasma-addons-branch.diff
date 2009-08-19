@@ -1,437 +1,1551 @@
-Index: dataengines/comic/comicproviderwrapper.cpp
+Index: dataengines/ocs/plasma-dataengine-ocs.desktop
 ===================================================================
---- dataengines/comic/comicproviderwrapper.cpp	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ dataengines/comic/comicproviderwrapper.cpp	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -573,6 +573,28 @@
-         case StringIdentifier:
-             break;
-         }
-+    //check if the nextIdentifier is correct
-+    } else if ( !mNextIdentifier.isNull() ) {
-+        //no nextIdentifier if mIdentifier == mLastIdentifier or if no identifier has been specified
-+        switch ( identifierType() ) {
-+        case DateIdentifier:
-+            if ( ( !mLastIdentifier.isNull() && ( mIdentifier.toDate() == mLastIdentifier.toDate() ) ) ||
-+                 !mIdentifierSpecified ) {
-+                return false;
-+            }
-+            break;
-+        case NumberIdentifier:
-+            if ( ( !mLastIdentifier.isNull() && ( mIdentifier.toInt() == mLastIdentifier.toInt() ) ) ||
-+                 !mIdentifierSpecified ) {
-+                return false;
-+            }
-+            break;
-+        case StringIdentifier:
-+            if ( !mIdentifierSpecified ) {
-+                return false;
-+            }
-+            break;
+--- dataengines/ocs/plasma-dataengine-ocs.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/ocs/plasma-dataengine-ocs.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -14,6 +14,7 @@
+ Name[nb]=Åpne samarbeidstjenester
+ Name[nds]=Open-Collaboration-Deensten
+ Name[nn]=Opne samarbeidtenester
++Name[pl]=Usługi do współpracy (Open Collaboration)
+ Name[pt]=Serviços Abertos de Colaboração
+ Name[pt_BR]=Serviços abertos de colaboração
+ Name[ro]=Servicii de Colaborare Deschisă
+@@ -22,6 +23,7 @@
+ Name[sr]=Сервиси отворене сарадње
+ Name[sr@latin]=Servisi otvorene saradnje
+ Name[sv]=Öppna sammarbetstjänster
++Name[tr]=Açık İşbirliği Servisleri
+ Name[uk]=Служби Open Collaboration
+ Name[wa]=Siervices Open Collaboration
+ Name[x-test]=xxOpen Collaboration Servicesxx
+Index: dataengines/ocs/lib/activity.h
+===================================================================
+--- dataengines/ocs/lib/activity.h	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/ocs/lib/activity.h	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -36,9 +36,12 @@
+ {
+   public:
+     typedef QList<Activity> List;
+-  
++
+     Activity();
+ 
++    void setId( const QString & );
++    QString id() const;
++
+     void setUser( const QString & );
+     QString user() const;
+ 
+@@ -52,7 +55,8 @@
+     QString link() const;
+ 
+   private:
+-    QString m_user;  
++    QString m_id;
++    QString m_user;
+     QDateTime m_timestamp;
+     QString m_message;
+     QString m_link;
+Index: dataengines/ocs/lib/activityparser.cpp
+===================================================================
+--- dataengines/ocs/lib/activityparser.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/ocs/lib/activityparser.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -45,7 +45,9 @@
+         xml.readNext();
+ 
+         if ( xml.isStartElement() ) {
+-          if ( xml.name() == "personid" ) {
++          if ( xml.name() == "id" ) {
++            activity.setId( xml.readElementText() );
++          } else if ( xml.name() == "personid" ) {
+             activity.setUser( xml.readElementText() );
+           } else if ( xml.name() == "timestamp" ) {
+             QString timestampString = xml.readElementText();
+Index: dataengines/ocs/lib/activity.cpp
+===================================================================
+--- dataengines/ocs/lib/activity.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/ocs/lib/activity.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -29,6 +29,16 @@
+ {
+ }
+ 
++void Activity::setId( const QString &id )
++{
++    m_id = id;
++}
++
++QString Activity::id() const
++{
++    return m_id;
++}
++
+ void Activity::setUser( const QString &u )
+ {
+   m_user = u;
+Index: dataengines/ocs/ocsengine.cpp
+===================================================================
+--- dataengines/ocs/ocsengine.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/ocs/ocsengine.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -177,12 +177,7 @@
+     return true;
+     kDebug() << "for name" << name;
+     if (name == I18N_NOOP("activity")) {
+-        foreach(const Attica::Activity &activity, m_activities ) {
+-            setData(name, I18N_NOOP("user"), activity.user());
+-            setData(name, I18N_NOOP("timestamp"), activity.timestamp());
+-            setData(name, I18N_NOOP("message"), activity.message());
+-        }
+-        return true;
++
+     } else if (name.startsWith("Friends-")) {
+ 
+     }
+@@ -196,7 +191,16 @@
+     if (!j->error()) {
+         Attica::ActivityListJob *job = static_cast<Attica::ActivityListJob *>( j );
+         m_activities = job->ActivityList();
+-        updateSourceEvent(I18N_NOOP("activity"));
++
++        foreach(const Attica::Activity &activity, m_activities ) {
++            Plasma::DataEngine::Data activityData;
++            activityData["id"] = activity.id();
++            activityData["user"] = activity.user();
++            activityData["timestamp"] = activity.timestamp();
++            activityData["message"] = activity.message();
++
++            setData("activity", activity.id(), activityData);
 +        }
      }
-     return mNextIdentifier;
  }
-@@ -598,6 +620,22 @@
-         case StringIdentifier:
-             break;
-         }
-+    } else if ( !mPreviousIdentifier.isNull() ) {
-+        //no previousIdentifier if mIdentifier == mFirstIdentifier
-+        switch ( identifierType() ) {
-+        case DateIdentifier:
-+            if ( !mFirstIdentifier.isNull() && ( mIdentifier.toDate() == mFirstIdentifier.toDate() ) ) {
-+                return false;
-+            }
-+            break;
-+        case NumberIdentifier:
-+            if ( !mFirstIdentifier.isNull() && ( mIdentifier.toInt() == mFirstIdentifier.toInt() ) ) {
-+                return false;
-+            }
-+            break;
-+        case StringIdentifier:
-+            break;
-+        }
-     }
-     return mPreviousIdentifier;
- }
-Index: dataengines/comic/plasma_comicprovider.desktop
+ 
+Index: dataengines/potd/oseiprovider.desktop
 ===================================================================
---- dataengines/comic/plasma_comicprovider.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ dataengines/comic/plasma_comicprovider.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -17,7 +17,7 @@
- Comment[gl]=Extensión para o motor de Cómics de Plasma
- Comment[he]=פלאגין של מנוע הקומיקסים עבור Plasma
- Comment[hu]=Modul a Plasma képregényrajzolóhoz
--Comment[it]=Plugin per il Motore fumetti per Plasma
-+Comment[it]=Estensione per il motore di fumetti di Plasma
- Comment[ja]=Plasma コミックエンジンのためのプラグイン
- Comment[km]=កម្មវិធី​ជំនួយ​សម្រាប់​ម៉ាស៊ីន​បំប្លែង Plasma
- Comment[ko]=Plasma 만화 엔진 플러그인
+--- dataengines/potd/oseiprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/oseiprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -24,6 +24,7 @@
+ Name[nds]=Osei-Anbeder
+ Name[nl]=Osei-provider
+ Name[nn]=Osei-tilbydar
++Name[pl]=Usługodawca Osei
+ Name[pt]=Fornecedor do Osei
+ Name[pt_BR]=Fornecedor Osei
+ Name[ro]=Furnizor Osei
+@@ -56,6 +57,7 @@
+ Comment[nds]=Osei-Anbeder
+ Comment[nl]=Osei-provider
+ Comment[nn]=Osei-tilbydar
++Comment[pl]=Usługodawca Osei
+ Comment[pt]=Fornecedor do Osei
+ Comment[pt_BR]=Fornecedor Osei
+ Comment[ro]=Furnizor Osei
+Index: dataengines/potd/wcpotdprovider.desktop
+===================================================================
+--- dataengines/potd/wcpotdprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/wcpotdprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -25,6 +25,7 @@
+ Name[nds]=Wc-BiV-Anbeder
+ Name[nl]=Wcpotd-provider
+ Name[nn]=Wcpotd-tilbydar
++Name[pl]=Usługodawca Wcpotd
+ Name[pt]=Fornecedor do Wcpotd
+ Name[pt_BR]=Fornecedor Wcpotd
+ Name[ro]=Furnizor Wcpotd
+@@ -58,6 +59,7 @@
+ Comment[nds]=Wc-BiV-Anbeder
+ Comment[nl]=Wcpotd-provider
+ Comment[nn]=Wcpotd-tilbydar
++Comment[pl]=Usługodawca Wcpotd
+ Comment[pt]=Fornecedor do Wcpotd
+ Comment[pt_BR]=Fornecedor Wcpotd
+ Comment[ro]=Furnizor Wcpotd
+Index: dataengines/potd/plasma_potdprovider.desktop
+===================================================================
+--- dataengines/potd/plasma_potdprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/plasma_potdprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -20,6 +20,7 @@
+ Comment[nds]=Moduul för Plasma sien BiV-Karn
+ Comment[nl]=Plugin voor Plasma-PoTD-engine
+ Comment[nn]=Programtillegg for Plasma PoTD-motoren
++Comment[pl]=Wtyczka silnika PoTD Plazmy
+ Comment[pt]='Plugin' do Motor da Imagem do Dia do Plasma
+ Comment[pt_BR]=Plug-in para o mecanismo PoTD do Plasma
+ Comment[ro]=Modul pentru motorul de imagine a zilei Plasma
+Index: dataengines/potd/plasma-dataengine-potd.desktop
+===================================================================
+--- dataengines/potd/plasma-dataengine-potd.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/plasma-dataengine-potd.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -19,6 +19,7 @@
+ Name[nl]=Afbeelding van de dag
+ Name[nn]=Dagens bilete
+ Name[pa]=ਅੱਜ ਦੀ ਤਸਵੀਰ
++Name[pl]=Obraz dnia
+ Name[pt]=Imagem do Dia
+ Name[pt_BR]=Imagem do dia
+ Name[ro]=Imaginea zilei
+@@ -52,6 +53,7 @@
+ Comment[nds]=Datenkarn för't Halen vun verscheden Biller för Vundaag ut't Internet.
+ Comment[nl]=Gegevensengine voor het verkrijgen van online afbeeldingen-van-de-dag.
+ Comment[nn]=Datamotor for henting av dagens bilete
++Comment[pl]=Silnik danych do pobierania różnych "obrazów dnia".
+ Comment[pt]=Motor de dados para obter diversas Imagens do Dia a nível 'online'.
+ Comment[pt_BR]=Mecanismo de dados para obter várias imagens do dia online.
+ Comment[ro]=Motor de date pentru obținerea Imaginii zilei din diverse locuri.
+Index: dataengines/potd/flickrprovider.desktop
+===================================================================
+--- dataengines/potd/flickrprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/flickrprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -25,6 +25,7 @@
+ Name[nl]=Flickr-provider
+ Name[nn]=Flickr-tilbydar
+ Name[pa]=ਫਲਿੱਕਰ ਪਰੋਵਾਇਡਰ
++Name[pl]=Usługodawca Flickr
+ Name[pt]=Fornecedor do Flickr
+ Name[pt_BR]=Fornecedor Flickr
+ Name[ro]=Furnizor Flickr
+@@ -58,6 +59,7 @@
+ Comment[nl]=Flickr-provider
+ Comment[nn]=Flickr-tilbydar
+ Comment[pa]=ਫਲਿੱਕਰ ਪਰੋਵਾਇਡਰ
++Comment[pl]=Usługodawca Flickr
+ Comment[pt]=Fornecedor do Flickr
+ Comment[pt_BR]=Fornecedor Flickr
+ Comment[ro]=Furnizor Flickr
+Index: dataengines/potd/apodprovider.desktop
+===================================================================
+--- dataengines/potd/apodprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/apodprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -24,6 +24,7 @@
+ Name[nds]=ABiV-Anbeder
+ Name[nl]=Apod-provider
+ Name[nn]=Apod-tilbydar
++Name[pl]=Usługodawca Apod
+ Name[pt]=Fornecedor do Apod
+ Name[pt_BR]=Fornecedor Apod
+ Name[ro]=Furnizor Apod
+@@ -56,6 +57,7 @@
+ Comment[nds]=ABiV-Anbeder
+ Comment[nl]=Apod-provider
+ Comment[nn]=Apod-tilbydar
++Comment[pl]=Usługodawca Apod
+ Comment[pt]=Fornecedor do Apod
+ Comment[pt_BR]=Fornecedor Apod
+ Comment[ro]=Furnizor Apod
+Index: dataengines/potd/epodprovider.desktop
+===================================================================
+--- dataengines/potd/epodprovider.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/potd/epodprovider.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -24,6 +24,7 @@
+ Name[nds]=EBiV-Anbeder
+ Name[nl]=Epod-provider
+ Name[nn]=Epod-tilbydar
++Name[pl]=Usługodawca Epod
+ Name[pt]=Fornecedor do Epod
+ Name[pt_BR]=Fornecedor Epod
+ Name[ro]=Furnizor Epod
+@@ -56,6 +57,7 @@
+ Comment[nds]=EBiV-Anbeder
+ Comment[nl]=Epod-provider
+ Comment[nn]=Epod-tilbydar
++Comment[pl]=Usługodawca Epod
+ Comment[pt]=Fornecedor do Epod
+ Comment[pt_BR]=Fornecedor Epod
+ Comment[ro]=Furnizor Epod
 Index: dataengines/comic/plasma-dataengine-comic.desktop
 ===================================================================
---- dataengines/comic/plasma-dataengine-comic.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ dataengines/comic/plasma-dataengine-comic.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -13,7 +13,7 @@
- Name[ga]=Stiallchartúin
- Name[gl]=Banda deseñada
- Name[he]=רצועות הקומיקס
--Name[it]=Striscie a fumetti
-+Name[it]=Strisce di fumetti
- Name[ja]=コミック・ストリップ
- Name[km]=រឿង​កំប្លែង
- Name[ku]=Pirtûkên Qerfî
-Index: dataengines/comic/comic.cpp
+--- dataengines/comic/plasma-dataengine-comic.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/comic/plasma-dataengine-comic.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -62,6 +62,7 @@
+ Comment[nds]=Internet-Comics
+ Comment[nl]=Online stripverhalen
+ Comment[nn]=Teikneseriar på nettet
++Comment[pl]=Komiksy online
+ Comment[pt]=Bandas desenhadas 'online'
+ Comment[pt_BR]=Tirinhas online
+ Comment[ro]=Benzi desenate online
+Index: dataengines/rememberthemilk/plasma-engine-rtm.desktop
 ===================================================================
---- dataengines/comic/comic.cpp	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ dataengines/comic/comic.cpp	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -173,7 +173,7 @@
-     // different comic -- with no error yet -- has been chosen, old error is invalidated
-     QString temp = mIdentifierError.left( mIdentifierError.indexOf( ':' ) + 1 );
-     if ( !mIdentifierError.isEmpty() && provider->identifier().indexOf( temp ) == -1 ) {
--        mIdentifierError = QString();
-+        mIdentifierError.clear();
-     }
+--- dataengines/rememberthemilk/plasma-engine-rtm.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/rememberthemilk/plasma-engine-rtm.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -18,6 +18,7 @@
+ Name[nl]=Engine voor The Milk onthouden
+ Name[nn]=Datamotor for Remember The Milk
+ Name[pa]=ਰੀਮੈਂਬਰ ਦਾ ਮਿਲਕ ਇੰਜਣ
++Name[pl]=Silnik Remember The Milk
+ Name[pt]=Motor para Recordar as Tarefas
+ Name[pt_BR]=Mecanismo Remember The Milk
+ Name[ro]=Motor Nu uita laptele
+@@ -50,6 +51,7 @@
+ Comment[nl]=Een engine om samen te werken met Remember The Milk.
+ Comment[nn]=Datamotor for Remember The Milk
+ Comment[pa]=ਰੀਮੈਂਬਰ ਦਾ ਮਿਲਕ ਨਾਲ ਕੰਮ ਕਰਨ ਲਈ ਇੰਜਣ ਹੈ।
++Comment[pl]=Silnik pracujący z Remember the Milk.
+ Comment[pt]=Um motor para funcionar com a 'applet' de recordação de tarefas.
+ Comment[pt_BR]=Um mecanismo para trabalhar com o Remember The Milk.
+ Comment[ro]=Motor pentru lucrul cu Remember the Milk.
+Index: dataengines/microblog/plasma-dataengine-microblog.desktop
+===================================================================
+--- dataengines/microblog/plasma-dataengine-microblog.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ dataengines/microblog/plasma-dataengine-microblog.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -17,6 +17,7 @@
+ Name[nds]=Mikronettdagbook
+ Name[nn]=Mikroblogging
+ Name[pa]=ਮਾਈਕਰੋਬਲਾਗ
++Name[pl]=Mikroblog
+ Name[pt]=Micro-blog
+ Name[pt_BR]=Micro-blog
+ Name[sk]=Mikroblogovanie
+@@ -46,6 +47,7 @@
+ Comment[nds]=Mikro-Nettdaagbookdeensten "identi.ca" un "twitter"
+ Comment[nl]=identi.ca en twitter micro-blogging-services
+ Comment[nn]=Mikrobloggingstenestene identi.ca og Twitter
++Comment[pl]=Usługi mikrobloga identi.ca i twitter
+ Comment[pt]=serviços de micro-blogs identi.ca e twitter
+ Comment[pt_BR]=Serviços de microblogagem identi.ca e twitter
+ Comment[ro]=Servicii de micro-blogging identi.ca și twitter
+@@ -54,6 +56,7 @@
+ Comment[sr]=Микроблогерски сервиси Идентика и Твитер
+ Comment[sr@latin]=Mikroblogerski servisi identi.ca i Twitter
+ Comment[sv]=Mikrowebbjournaltjänsterna identi.ca och twitter
++Comment[tr]=identi.ca ve twitter mini-günlük servisleri
+ Comment[uk]=Служби мікроблогів identi.ca і twitter
+ Comment[wa]=Siervices identi.ca eyet twitter micro-blogging
+ Comment[x-test]=xxidenti.ca and twitter micro-blogging servicesxx
+Index: applets/magnifique/plasma-applet-magnifique.desktop
+===================================================================
+--- applets/magnifique/plasma-applet-magnifique.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/magnifique/plasma-applet-magnifique.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -11,7 +11,20 @@
+ Name[wa]=Magnifike
+ Name[x-test]=xxMagnifiquexx
+ Name[zh_CN]=魅影
+-Comment = a magnification glass for Plasma canvas
++Comment=A magnification glass for the Plasma desktop
++Comment[es]=Una lente de aumento para el escritorio Plasma
++Comment[et]=Plasma töölaua suurendusklaas
++Comment[is]=Stækkunargler fyrir Plasma skjáborðið
++Comment[it]=Una lente d'ingrandimento per il desktop Plasma
++Comment[nds]=En Kiekglas för den Plasma-Schriefdisch
++Comment[nl]=Een vergrootglas voor het Plasma bureaublad
++Comment[nn]=Eit forstørringsglas til Plasma-skrivebordet
++Comment[pt]=Uma lupa de ampliação para o ambiente de trabalho Plasma
++Comment[pt_BR]=Uma lente de aumento para a área de trabalho Plasma
++Comment[sv]=Ett förstoringsglas för Plasmaskrivbordet
++Comment[uk]=Збільшувальне скло для стільниці Плазми
++Comment[x-test]=xxA magnification glass for the Plasma desktopxx
++Comment[zh_TW]=Plasma 桌面上的放大鏡
+ Type=Service
+ Icon=zoom-in
  
-     // store in cache if it's not the response of a CachedProvider,
-Index: applets/showdashboard/plasma-applet-showdashboard.desktop
+Index: applets/opendesktop/contactwidget.cpp
 ===================================================================
---- applets/showdashboard/plasma-applet-showdashboard.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/showdashboard/plasma-applet-showdashboard.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -13,7 +13,7 @@
- Name[ga]=Taispeáin Painéal na nGiuirléidí
- Name[gl]=Mostrar o widget do cadro de control
- Name[he]=הצג את המכתבה של Plasma
--Name[it]=Mostra la Dashboard dei widget
-+Name[it]=Mostra la dashboard degli oggetti
- Name[ja]=ウィジェットのダッシュボードを表示
- Name[km]=បង្ហាញផ្ទាំង​គ្រប់គ្រង​ធាតុក្រាហ្វិក
- Name[ku]=Kontrolkerê Alavan Nîşan Bide
-@@ -66,8 +66,8 @@
- Comment[ro]=Arată tabloul de bord cu controale Plasma deasupra celorlalte ferestre
- Comment[ru]=Показывает прибоную доску Plasma поверх всех окон
- Comment[sl]=Prikaži armatruno ploščo gradnikov Plasme pred drugimi okni
--Comment[sr]=Инструмент-табла Плазма виџета изнад других прозора
--Comment[sr@latin]=Instrument-tabla Plasma vidžeta iznad drugih prozora
-+Comment[sr]=Инструмент-табла плазма виџета изнад других прозора
-+Comment[sr@latin]=Instrument-tabla plasma vidžeta iznad drugih prozora
- Comment[sv]=Visa den grafiska instrumentpanelkomponenten i Plasma ovanför andra fönster
- Comment[th]=แสดงแดชบอร์ดบรรจุวิดเจ็ตของพลาสมา ให้อยู่เหนือหน้าต่างอื่น ๆ
- Comment[tr]=Plasma Programcık kontrol panelini diğer pencerelerin üzerinde göster
-Index: applets/comic/plasma-comic-default.desktop
-===================================================================
---- applets/comic/plasma-comic-default.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/comic/plasma-comic-default.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -16,7 +16,7 @@
- Name[gl]=Banda deseñada
- Name[he]=קומיקס
- Name[hu]=Képregény
--Name[it]=Striscia a fumetti
-+Name[it]=Striscia di fumetti
- Name[ja]=コミック・ストリップ
- Name[km]=យក​កំប្លែង​ចេញ
- Name[ko]=만화 조각
-@@ -56,7 +56,7 @@
- Comment[ga]=Taispeáin stiallchartún ón Idirlíon
- Comment[gl]=Mostra bandas deseñadas de internet
- Comment[he]=מציג קומיקסים נבחרים מהאינטרנט
--Comment[it]=Vedi una striscia a fumetti da internet.
-+Comment[it]=Vedi una striscia di fumetti da Internet.
- Comment[ja]=インターネット上のコミック・ストリップを表示します
- Comment[km]=មើល​រឿង​កំប្លែង​ពី​អ៊ីនធឺណិត
- Comment[ku]=Ji Torê pirtûkên qerfî bibîne
-Index: applets/comic/comic.cpp
-===================================================================
---- applets/comic/comic.cpp	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/comic/comic.cpp	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -660,6 +660,7 @@
- {
-     mEngine = dataEngine( "comic" );
+--- applets/opendesktop/contactwidget.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/opendesktop/contactwidget.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -195,13 +195,13 @@
  
-+    setConfigurationRequired( mComicIdentifier.isEmpty() );
-     if ( !mComicIdentifier.isEmpty() && mEngine && mEngine->isValid() ) {
-         const QString identifier = mComicIdentifier + ':' + identifierSuffix;
-         mEngine->disconnectSource( identifier, this );
-@@ -696,7 +697,7 @@
+ void ContactWidget::sendMessage()
  {
-     mActionGoFirst->setVisible( !mFirstIdentifierSuffix.isEmpty() );
-     mActionGoFirst->setEnabled( !mPreviousIdentifierSuffix.isEmpty() );
--    mActionGoLast->setEnabled( !mNextIdentifierSuffix.isEmpty() );
-+    mActionGoLast->setEnabled( true );//always enabled to have some kind of refresh action
+-    QUrl url = QString("http://www.opendesktop.org/messages/?action=newmessage&username=%1").arg(user());
++    QUrl url = QString("https://www.opendesktop.org/messages/?action=newmessage&username=%1").arg(user());
+     new KRun(url, m_nameLabel->nativeWidget());
  }
  
- void ComicApplet::slotSaveComicAs()
-Index: applets/lancelot/app/src/Messages.sh
+ void ContactWidget::addFriend()
+ {
+-    KUrl url = QString("http://www.opendesktop.org/usermanager/relationadd.php?username=%1").arg(user());
++    KUrl url = QString("https://www.opendesktop.org/usermanager/relationadd.php?username=%1").arg(user());
+     kDebug() << "add friend" << user() << url.url();
+     new KRun(url, m_nameLabel->nativeWidget());
+ }
+Index: applets/opendesktop/plasma-applet-opendesktop.desktop
 ===================================================================
---- applets/lancelot/app/src/Messages.sh	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/lancelot/app/src/Messages.sh	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -1,4 +1,4 @@
- #! /usr/bin/env bash
- $EXTRACTRC `find . -name \*.ui` >> rc.cpp || exit 11
--$XGETTEXT *.cpp -o $podir/lancelot.pot
-+$XGETTEXT `find . -name \*.cpp` -o $podir/lancelot.pot
- rm -f rc.cpp
-Index: applets/twitter/plasma-twitter-default.desktop
+--- applets/opendesktop/plasma-applet-opendesktop.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/opendesktop/plasma-applet-opendesktop.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -27,6 +27,7 @@
+ Comment[nl]=Communiceer met het sociale bureaublad
+ Comment[nn]=Kommuniser via openDesktop
+ Comment[pa]=ਸਮਾਜਿਕ ਡੈਸਕਟਾਪ ਦੀ ਵਰਤੋਂ ਕਰਕੇ ਸੰਚਾਰ
++Comment[pl]=Komunikacja przy użyciu Pulpitu społecznościowego
+ Comment[pt]=Comunicar com o Ambiente de Trabalho Social
+ Comment[pt_BR]=Comunique-se usando o Ambiente de Trabalho Social
+ Comment[ro]=Comunicați utilizînd Biroul Social
+@@ -35,6 +36,7 @@
+ Comment[sr]=Комуницирање путем Друштвене површи
+ Comment[sr@latin]=Komuniciranje putem Društvene površi
+ Comment[sv]=Kommunicera med användning av det sociala skrivbordet
++Comment[tr]=Sosyal Masaüstünü kullanarak iletişim kur
+ Comment[uk]=Спілкування за допомогою соціальної стільниці
+ Comment[wa]=Comuniker e s' siervant do Scribanne sociå
+ Comment[x-test]=xxCommunicate using the Social Desktopxx
+@@ -72,6 +74,7 @@
+ Keywords[nl]=Hulpmiddelen
+ Keywords[nn]=Verktøy
+ Keywords[pa]=ਸਹੂਲਤਾਂ
++Keywords[pl]=Narzędzia
+ Keywords[pt]=Utilitários
+ Keywords[pt_BR]=Utilitários
+ Keywords[ro]=Utilitare
+@@ -80,6 +83,7 @@
+ Keywords[sr]=Алатке
+ Keywords[sr@latin]=Alatke
+ Keywords[sv]=Verktyg
++Keywords[tr]=Yardımcı Araçlar
+ Keywords[uk]=Інструменти
+ Keywords[wa]=Usteyes
+ Keywords[x-test]=xxUtilitiesxx
+Index: applets/opendesktop/opendesktop.cpp
 ===================================================================
---- applets/twitter/plasma-twitter-default.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/twitter/plasma-twitter-default.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -46,7 +46,7 @@
- Comment[ga]=Nuashonrú do stádas Twitter agus taispeáin do líne ama.
- Comment[gl]=Anova o seu estado en Twitter e mostra a súa liña de tempo.
- Comment[he]=עדכן את סטטוס ה Twitter שלך והצג את ציר הזמן שלך
--Comment[it]=Aggiornare il tuo stato di Twitter e mostra la tua cronologia.
-+Comment[it]=Aggiorna lo stato di Twitter e mostra la cronologia.
- Comment[ja]=Twitter の状態を更新し、あなたのタイムラインを表示します
- Comment[km]=ធ្វើ​ឲ្យ​ស្ថានភាព Twitter របស់​អ្នក​ទាន់សម័យ និង​បង្ហាញ​ពេលវេលា​របស់​អ្នក ។
- Comment[ku]=Rewşên Twitter rojane bike û rêzika-demê nîşan bide
-Index: applets/kolourpicker/kolourpicker.cpp
-===================================================================
---- applets/kolourpicker/kolourpicker.cpp	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/kolourpicker/kolourpicker.cpp	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -124,6 +124,7 @@
-     QPixmap pix(size);
-     pix.fill(QColor(0,0,0,0));
-     QPainter p(&pix);
-+    p.setRenderHint(QPainter::Antialiasing, true);
-     paint(&p, pix.rect(), mode, state);
-     p.end();
-     return pix;
-Index: applets/konqprofiles/plasma-applet-konqprofiles.desktop
-===================================================================
---- applets/konqprofiles/plasma-applet-konqprofiles.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/konqprofiles/plasma-applet-konqprofiles.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -55,7 +55,7 @@
- Comment[gl]=Enumera e inicia perfís de Konqueror
- Comment[he]=הצג והפעל פרופילים של Konqueror
- Comment[hu]=Indítható Konqueror-profilok
--Comment[it]=Lista e lanciatore dei profili di Konqueror
-+Comment[it]=Elenca ed esegue i profili di Konqueror
- Comment[ja]=Konqueror のプロファイルを起動します
- Comment[km]=រាយ និង​ចាប់ផ្ដើម​ទម្រង់​របស់ Konqueror
- Comment[ku]=Profîlên Konqueror lîste bike û bide destpêkirin
-Index: applets/life/plasma-applet-life.desktop
-===================================================================
---- applets/life/plasma-applet-life.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/life/plasma-applet-life.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -27,7 +27,7 @@
- Name[sr]=живот
- Name[sr@latin]=život
- Name[th]=ไลฟ์
--Name[uk]=Термін використання
-+Name[uk]=Життя
- Name[wa]=Vicåreye
- Name[x-test]=xxLifexx
- Name[zh_CN]=生命
-@@ -45,7 +45,7 @@
- Comment[ga]= Feidhmchláirín Conway's Game of Life
- Comment[gl]=Applet do xogo da vida de Conway
- Comment[he]=משחק החיים של Conway
--Comment[it]=Appet del Gioco della vita di Conway
-+Comment[it]=Applet del gioco della vita di Conway
- Comment[ja]=ライフゲーム (Conway's Game of Life) アプレット
- Comment[km]= អាប់ភ្លេត​ជីវិត​ល្បែង​របស់ Conway
- Comment[ku]=Sepanoka Lîstika Jiyanê ya Conway 
-Index: applets/timer/plasma-applet-timer.desktop
-===================================================================
---- applets/timer/plasma-applet-timer.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/timer/plasma-applet-timer.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -14,6 +14,7 @@
- Name[ga]=Uaineadóir
- Name[gl]=Temporizador
- Name[he]=קוצב זמן
-+Name[it]=Temporizzatore
- Name[ja]=タイマー
- Name[km]=កម្មវិធី​កំណត់​ពេលវេលា
- Name[lt]=Laikmatis
-Index: applets/leavenote/plasma-applet-leavenote.desktop
-===================================================================
---- applets/leavenote/plasma-applet-leavenote.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/leavenote/plasma-applet-leavenote.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -56,7 +56,7 @@
- Comment[gl]=Deixa notas para os usuarios mentras estásn ausentes
- Comment[he]=משאיר פתקים בשביל משתמשים בזמן שהם לא נמצאים
- Comment[hu]=Távolléti üzenet
--Comment[it]=Lascia una nota per gli utenti mentre sono via
-+Comment[it]=Lascia una nota per gli utenti assenti
- Comment[ja]=離席中のユーザにメモを残します
- Comment[km]=ទុក​ចំណាំ​សម្រាប់​អ្នកប្រើ​ខណៈពេល​ដែល​ពួកគេ​ចាក​ឆ្ងាយ
- Comment[ku]=Ji bo bikarhênerên niha ne li vir in nîşeyan binivîse
-Index: applets/calculator/calculator.cpp
-===================================================================
---- applets/calculator/calculator.cpp	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/calculator/calculator.cpp	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -336,7 +336,7 @@
- 
-     if (!inputText.contains(KGlobal::locale()->decimalSymbol())) {
-       //If there is no decimal, then we need to reformat the number
--      double currentValue = inputText.toDouble();
-+      double currentValue = KGlobal::locale()->readNumber(inputText);
-       QString localizedString = KGlobal::locale()->formatNumber(currentValue, 0);
-       mOutputDisplay->setText(localizedString);
+--- applets/opendesktop/opendesktop.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/opendesktop/opendesktop.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -115,8 +115,8 @@
      } else {
-@@ -366,7 +366,7 @@
+         connectPerson(m_username);
+         connectFriends(m_username);
++        connectGeolocation();
+     }
+-    connectGeolocation();
+ }
  
- void CalculatorApplet::slotAddClicked()
+ void OpenDesktop::connectGeolocation()
+@@ -422,6 +422,9 @@
+         m_displayedUser = m_username;
+         connectPerson(m_username);
+         connectFriends(m_username);
++        if (!m_username.isEmpty()) {
++            connectGeolocation();
++        }
+         cg.writeEntry("username", m_username);
+         emit configNeedsSaving();
+         setConfigurationRequired(false);
+@@ -439,7 +442,7 @@
+ 
+ void OpenDesktop::registerAccount()
  {
--    double currentValue = inputText.toDouble();
-+    double currentValue = KGlobal::locale()->readNumber(inputText);
+-    KUrl url("http://www.opendesktop.org/usermanager/new.php");
++    KUrl url("https://www.opendesktop.org/usermanager/new.php");
+     kDebug() << "register new account" << url.url();
+     new KRun(url, ui.registerButton);
+ }
+Index: applets/mediaplayer/plasma-applet-mediaplayer.desktop
+===================================================================
+--- applets/mediaplayer/plasma-applet-mediaplayer.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/mediaplayer/plasma-applet-mediaplayer.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -20,6 +20,7 @@
+ Name[nl]=Mediaspeler
+ Name[nn]=Mediespelar
+ Name[pa]=ਮੀਡਿਆ ਪਲੇਅਰ
++Name[pl]=Odtwarzacz multimedialny
+ Name[pt]=Reprodutor Multimédia
+ Name[pt_BR]=Reprodutor de mídia
+ Name[ro]=Redare multimedia
+@@ -28,6 +29,7 @@
+ Name[sr]=медија плејер
+ Name[sr@latin]=medija plejer
+ Name[sv]=Mediaspelare
++Name[tr]=Ortam Oynatıcı
+ Name[uk]=Медіапрогравач
+ Name[wa]=Djouweu d' media
+ Name[x-test]=xxMedia Playerxx
+@@ -53,6 +55,7 @@
+ Comment[nl]=Widget die video en geluid kan afspelen
+ Comment[nn]=Element som kan spela video og lyd
+ Comment[pa]=ਵਿਦਜੈਟ, ਜੋ ਕਿ ਵੀਡਿਓ ਅਤੇ ਸਾਊਂਡ ਚਲਾ ਸਕਦਾ ਹੈ
++Comment[pl]=Element interfejsu, który potrafi odtwarzać wideo i dźwięk
+ Comment[pt]=Um elemento que pode reproduzir vídeo e áudio
+ Comment[pt_BR]=Widget que pode tocar som e vídeo
+ Comment[ro]=COntrol ce poate reda video și sunet
+@@ -61,6 +64,7 @@
+ Comment[sr]=Виџет за пуштање филмова и музике
+ Comment[sr@latin]=Vidžet za puštanje filmova i muzike
+ Comment[sv]=Grafisk komponent som kan spela video och ljud
++Comment[tr]=Ses çalabilen ve video oynatabilen gereç
+ Comment[uk]=Віджет, призначений для відтворення відео і звуку
+ Comment[wa]=Ahesse ki sait djouwer des videyos et do son
+ Comment[x-test]=xxWidget that can play video and soundxx
+Index: applets/lancelot/app/src/models/ContactsKopete.h
+===================================================================
+--- applets/lancelot/app/src/models/ContactsKopete.h	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/models/ContactsKopete.h	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -31,19 +31,21 @@
+     ContactsKopete();
+     ~ContactsKopete();
  
-     //We need to prevent the rounding that is occurring here!
+-    void timerEvent(QTimerEvent * event);
+-
+ protected:
+     void activate(int index);
+     void load();
++    void load(bool forceReload);
+     void updateContactData(const QString & contactId);
++    void timerEvent(QTimerEvent * event);
  
-@@ -385,7 +385,7 @@
+ protected Q_SLOTS:
+     void contactChanged(const QString & contactId);
  
- void CalculatorApplet::slotSubtractClicked()
+ private:
+     org::kde::Kopete * m_interface;
+-    QBasicTimer m_timer;
++    QBasicTimer m_delayTimer;
++    QBasicTimer m_checkRunningTimer;
++    QStringList m_contactsToUpdate;
+     QString m_kopeteAvatarsDir;
+     bool m_kopeteRunning : 1;
+     bool m_noOnlineContacts : 1;
+Index: applets/lancelot/app/src/models/ContactsKopete.cpp
+===================================================================
+--- applets/lancelot/app/src/models/ContactsKopete.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/models/ContactsKopete.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -25,11 +25,12 @@
+ 
+ // #define UPDATE_INTERVAL 15000
+ #define CHECK_RUNNING_INTERVAL 5000
++#define DELAY_INTERVAL 500
+ 
+ namespace Models {
+ 
+ ContactsKopete::ContactsKopete()
+-    : m_interface(NULL), m_kopeteRunning(true)
++    : m_interface(NULL), m_kopeteRunning(false)
  {
--    double currentValue = inputText.toDouble();
-+    double currentValue = KGlobal::locale()->readNumber(inputText);
+     setSelfTitle(i18n("Contacts"));
+     setSelfIcon(KIcon("kopete"));
+@@ -40,14 +41,27 @@
+     m_kopeteAvatarsDir = KStandardDirs::locate(
+             "data", "kopete/avatars/Contacts/");
  
-     if (previousAddSubOperation!=calcNone) {
-         calculate(currentValue, previousAddSubOperation);
-@@ -400,7 +400,7 @@
+-    m_timer.start(CHECK_RUNNING_INTERVAL, this);
++    m_checkRunningTimer.start(CHECK_RUNNING_INTERVAL, this);
+     load();
+ }
  
- void CalculatorApplet::slotMultiplyClicked()
+ void ContactsKopete::timerEvent(QTimerEvent * event)
  {
--    double currentValue = inputText.toDouble();
-+    double currentValue = KGlobal::locale()->readNumber(inputText);
+-    if (event->timerId() == m_timer.timerId()) {
++    if (event->timerId() == m_checkRunningTimer.timerId()) {
+         load();
++    } else if (event->timerId() == m_delayTimer.timerId()) {
++        qDebug() << "ContactsKopete::contactChanged [delayed]:"
++            << m_contactsToUpdate.size();
++        m_delayTimer.stop();
++        // checking whether we have a large update
++        if (m_contactsToUpdate.size() > 5) {
++            load(true);
++        } else {
++            foreach(QString contact, m_contactsToUpdate) {
++                updateContactData(contact);
++            }
++        }
++        m_contactsToUpdate.clear();
+     }
+ }
  
-     if (previousMulDivOperation!=calcNone) {
-         calculate(currentValue, previousMulDivOperation);
-@@ -415,7 +415,7 @@
+@@ -70,42 +84,65 @@
  
- void CalculatorApplet::slotDivideClicked()
+ void ContactsKopete::load()
  {
--    double currentValue = inputText.toDouble();
-+    double currentValue = KGlobal::locale()->readNumber(inputText);
++    load(false);
++}
++
++void ContactsKopete::load(bool forceReload)
++{
+     setEmitInhibited(true);
+-    clear();
++    bool statusChanged = false;
++    // clear();
  
-     if (previousMulDivOperation!=calcNone) {
-         calculate(currentValue, previousMulDivOperation);
-@@ -431,7 +431,7 @@
- void CalculatorApplet::slotEqualsClicked()
+     if (!m_interface->isValid()) {
+-        m_kopeteRunning = false;
+-        m_timer.start(CHECK_RUNNING_INTERVAL, this);
++        if (m_kopeteRunning) {
++            qDebug() << "ContactsKopete::disconnecting D-Bus";
++            disconnect(m_interface, SIGNAL(contactChanged(const QString &)),
++                    this, SLOT(contactChanged(const QString &)));
++            statusChanged = true;
++        }
+ 
+-        if (addService("kopete")) {
+-            Item * item = const_cast < Item * > (& itemAt(0));
+-            item->title = i18n("Messaging client");
+-            item->description = i18n("Messaging client is not running");
+-        } else {
+-            add(i18n("Unable to find Kopete"), "",
+-                    KIcon("application-x-executable"), QVariant("http://kopete.kde.org"));
++        if (forceReload || statusChanged) {
++            clear();
++            m_kopeteRunning = false;
++            m_checkRunningTimer.start(CHECK_RUNNING_INTERVAL, this);
++
++            if (addService("kopete")) {
++                Item * item = const_cast < Item * > (& itemAt(0));
++                item->title = i18n("Messaging client");
++                item->description = i18n("Messaging client is not running");
++            } else {
++                add(i18n("Unable to find Kopete"), "",
++                        KIcon("application-x-executable"), QVariant("http://kopete.kde.org"));
++            }
+         }
+     } else {
+-        connect(m_interface, SIGNAL(contactChanged(const QString &)),
+-                this, SLOT(contactChanged(const QString &)));
++        if (!m_kopeteRunning) {
++            qDebug() << "ContactsKopete::connecting D-Bus";
++            connect(m_interface, SIGNAL(contactChanged(const QString &)),
++                    this, SLOT(contactChanged(const QString &)));
++            statusChanged = true;
++        }
+ 
+-        m_kopeteRunning = true;
+-        m_noOnlineContacts = false;
+-        // m_timer.start(UPDATE_INTERVAL, this);
++        if (forceReload || statusChanged) {
++            qDebug() << "ContactsKopete::load: full";
++            clear();
++            m_kopeteRunning = true;
++            m_noOnlineContacts = false;
+ 
+-        QDBusReply < QStringList > contacts = m_interface->contactsByFilter("online");
+-        if (!contacts.isValid()) {
+-            m_kopeteRunning = false;
+-            return;
+-        }
++            QDBusReply < QStringList > contacts = m_interface->contactsByFilter("online");
++            if (!contacts.isValid()) {
++                m_kopeteRunning = false;
++                return;
++            }
+ 
+-        foreach (const QString& contact, contacts.value()) {
+-             updateContactData(contact);
+-        }
++            foreach (const QString& contact, contacts.value()) {
++                 updateContactData(contact);
++            }
+ 
+-        if (size() == 0) {
+-            add(i18n("No online contacts"), "", KIcon("user-offline"), QVariant());
+-            m_noOnlineContacts = true;
++            if (size() == 0) {
++                add(i18n("No online contacts"), "", KIcon("user-offline"), QVariant());
++                m_noOnlineContacts = true;
++            }
+         }
+     }
+     setEmitInhibited(false);
+@@ -177,8 +214,13 @@
+ 
+ void ContactsKopete::contactChanged(const QString & contactId)
  {
-     bool ok;
--    double currentValue = inputText.toDouble(&ok);
-+    double currentValue = KGlobal::locale()->readNumber(inputText, &ok);
+-    qDebug() << "ContactsKopete::contactChanged:" << contactId;
+-    updateContactData(contactId);
++    // qDebug() << "ContactsKopete::contactChanged:" << contactId;
++    // updateContactData(contactId);
++    // delaying the update
++    if (!m_contactsToUpdate.contains(contactId)) {
++        m_contactsToUpdate << contactId;
++    }
++    m_delayTimer.start(DELAY_INTERVAL, this);
+ }
  
-     if (ok == false) {
-         handleError(i18n("ERROR"));
-Index: applets/rssnow/plasma-applet-rssnow.desktop
+ } // namespace Models
+Index: applets/lancelot/app/src/lancelot.notifyrc
 ===================================================================
---- applets/rssnow/plasma-applet-rssnow.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/rssnow/plasma-applet-rssnow.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -1,6 +1,5 @@
- [Desktop Entry]
- Name=RSSNOW
--Name[it]=RSSORA
- Name[sr]=РСС‑одмах
- Name[sr@latin]=RSS‑odmah
- Name[x-test]=xxRSSNOWxx
-Index: applets/luna/plasma-applet-luna.desktop
+--- applets/lancelot/app/src/lancelot.notifyrc	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/lancelot.notifyrc	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -25,6 +25,7 @@
+ Comment[nds]=Lancelot-Menü
+ Comment[nl]=Lancelot-menu
+ Comment[nn]=Lancelot-meny
++Comment[pl]=Menu Lancelota
+ Comment[pt]=Menu do Lancelot
+ Comment[pt_BR]=Menu do Lancelot
+ Comment[ro]=Meniul Lancelot
+@@ -63,6 +64,7 @@
+ Name[nds]=Bruuk-Logbook is anmaakt
+ Name[nl]=Loggen van gebruik is geactiveerd
+ Name[nn]=Brukar-logging er påslått
++Name[pl]=Logowanie użycia jest włączone
+ Name[pt]=O registo de utilizações está activo
+ Name[pt_BR]=O registro do uso está ativado
+ Name[ro]=Jurnalizarea utilizării este activată
+@@ -97,6 +99,7 @@
+ Comment[nds]=Bloots bi den eersten Oproop wiest. Bescheed dor över, dat Bruuk-Logbook is nu anmaakt.
+ Comment[nl]=Wordt alleen bij de eerste start getoond. Geeft aan dat gebruik loggen is geactiveerd.
+ Comment[nn]=Vis berre ved første start. Merk at brukslogginga er slått på.
++Comment[pl]=Pokazane tylko pierwsze uruchomienie. Powiadamia, że logowanie użycia jest włączone.
+ Comment[pt]=Mostrar apenas no primeiro lançamento. Notifica que o registo de utilizações está activo.
+ Comment[pt_BR]=Exibir somente na primeira inicialização. Notifica que o registro de uso está 'ligado'.
+ Comment[ro]=Afișat numai la prima lansare. Notifică că jurnalizarea utilizării este activată.
+@@ -132,6 +135,7 @@
+ Name[nl]=Fout bij openen van log
+ Name[nn]=Feil ved opning av loggen
+ Name[pa]=ਲਾਗ ਖੋਲ੍ਹਣ ਲਈ ਗਲਤੀ
++Name[pl]=Błąd podczas otwierania dziennika
+ Name[pt]=Ocorreu um erro ao aceder ao registo
+ Name[pt_BR]=Erro ao abri o log
+ Name[ro]=Eroare la deschiderea jurnalului
+@@ -167,6 +171,7 @@
+ Comment[nl]=Het openen van het logbestand is mislukt.
+ Comment[nn]=Klarte ikkje opna loggfila.
+ Comment[pa]=ਲਾਗ ਫਾਇਲ ਖੋਲ੍ਹਣ ਲਈ ਫੇਲ੍ਹ ਹੈ।
++Comment[pl]=Nieudane otwarcie dziennika.
+ Comment[pt]=Não foi possível aceder ao ficheiro de registo.
+ Comment[pt_BR]=Falha ao abrir o arquivo de log.
+ Comment[ro]=Eșec la deschiderea fișierului-jurnal.
+Index: applets/lancelot/app/src/QtDisplay.h
 ===================================================================
---- applets/luna/plasma-applet-luna.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/luna/plasma-applet-luna.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -37,7 +37,7 @@
- Comment[ku]=Ji bo herêma xwe rewşa heyvê nîşan bide
- Comment[lv]=Rāda mēness fāzi
- Comment[nds]=De aktuelle Maanschiev wiesen
--Comment[nl]=Toont maanfasen voor u locatie
-+Comment[nl]=Toont maanfasen voor uw locatie
- Comment[nn]=Vis korleis månen ser ut der du er
- Comment[pl]=Pokazywanie faz Księżyca w Twojej lokalizacji
- Comment[pt]=Mostrar as fases lunares para a sua localidade
-Index: applets/showdesktop/plasma-applet-showdesktop.desktop
+--- applets/lancelot/app/src/QtDisplay.h	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/QtDisplay.h	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -33,12 +33,7 @@
+ #include <QTimer>
+ #include <QMainWindow>
+ 
+-#include <X11/Xlib.h>
+-#include <X11/extensions/composite.h>
+-#include <X11/extensions/Xcomposite.h>
+ #include <X11/extensions/Xrender.h>
+-#include <X11/extensions/shape.h>
+-#include <X11/extensions/Xdamage.h>
+ 
+ /**
+  About QtDisplay Class
+Index: applets/lancelot/app/src/launcher/plasma-applet-lancelot-launcher.desktop
 ===================================================================
---- applets/showdesktop/plasma-applet-showdesktop.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/showdesktop/plasma-applet-showdesktop.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -74,8 +74,8 @@
- Comment[ro]=Arată biroul Plasma
- Comment[ru]=Показать рабочий стол Plasma
- Comment[sl]=Prikaži namizje Plasma
--Comment[sr]=Баците поглед на Плазма површ
--Comment[sr@latin]=Bacite pogled na Plasma površ
-+Comment[sr]=Баците поглед на плазма површ
-+Comment[sr@latin]=Bacite pogled na plasma površ
- Comment[sv]=Visa Plasmas skrivbord
- Comment[th]=แสดงพื้นที่ทำงานของพลาสมา
- Comment[tr]=Plasma masaüstünü göster
-Index: applets/konsoleprofiles/plasma-applet-konsoleprofiles.desktop
+--- applets/lancelot/app/src/launcher/plasma-applet-lancelot-launcher.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/launcher/plasma-applet-lancelot-launcher.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -30,7 +30,7 @@
+ Name[nl]=Lancelot-starter
+ Name[nn]=Lancelot programstartar
+ Name[pa]=ਲਾਂਸੀਕੋਤ ਲਾਂਚਰ
+-Name[pl]=Lancelot
++Name[pl]=Lancelot (program uruchamiający)
+ Name[pt]=Lançador do Lancelot
+ Name[pt_BR]=Lançador do Lancelot
+ Name[ro]=Lansatorul Lancelot
+Index: applets/lancelot/app/src/CMakeLists.txt
 ===================================================================
---- applets/konsoleprofiles/plasma-applet-konsoleprofiles.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ applets/konsoleprofiles/plasma-applet-konsoleprofiles.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -27,7 +27,7 @@
- Name[pl]=Profile Konsoli
- Name[pt]=Perfis do Konsole
- Name[pt_BR]=Perfis do Konsole
--Name[ro]=Profiluri consolă
-+Name[ro]=Profiluri konsolă
- Name[ru]=Konsole: профили
- Name[sl]=Profili za Konzolo
- Name[sr]=Конзолини профили
-@@ -55,7 +55,7 @@
- Comment[gl]=Enumera e inicia perfís de Konsole
- Comment[he]=הצג והפעל פרופילים של Konsole
- Comment[hu]=Indítható Konsole-profilok
--Comment[it]=Elenca ed avvia i profili di Konsole
-+Comment[it]=Elenca ed esegue i profili di Konsole
- Comment[ja]=Konsole のプロファイルを起動します
- Comment[km]=រាយ និង​ចាប់ផ្ដើម​ទម្រង់​របស់ Konsole
- Comment[ku]=Profîlên Konsolê lîste bike û bide destpêkirin
-Index: runners/konsolesessions/konsolesessions.desktop
+--- applets/lancelot/app/src/CMakeLists.txt	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/lancelot/app/src/CMakeLists.txt	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -9,12 +9,19 @@
+ # Checking for Composite Begin                          #
+ #########################################################
+ 
+-message ("Composite libraries?")
+-if( X11_Xcomposite_FOUND AND X11_Xdamage_FOUND )
++if(X11_Xrender_FOUND )
+     set( LANCELOT_HAVE_COMPOSITING 1 )
+-    message ("Composite libraries found")
+-endif( X11_Xcomposite_FOUND AND X11_Xdamage_FOUND )
++endif( X11_Xrender_FOUND )
+ 
++macro_log_feature(LANCELOT_HAVE_COMPOSITING
++   "XRender"
++   "Lancelot compositing support"
++   "http://www.x.org/"
++   FALSE
++   ""
++   "STRONGLY_RECOMMENDED: XRender extension is required for Lancelot compositing support")
++
++
+ configure_file(config-lancelot.h.cmake
+    ${CMAKE_CURRENT_BINARY_DIR}/config-lancelot.h )
+ 
+Index: applets/weatherstation/weatherstation.cpp
 ===================================================================
---- runners/konsolesessions/konsolesessions.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ runners/konsolesessions/konsolesessions.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -27,7 +27,7 @@
- Name[pl]=Sesje konsoli
- Name[pt]=Sessões do Konsole
- Name[pt_BR]=Sessões do Konsole
--Name[ro]=Sesiuni consolă
-+Name[ro]=Sesiuni konsolă
- Name[ru]=Konsole: сеансы
- Name[sl]=Seje Konzole
- Name[sr]=Конзолине сесије
-Index: runners/spellchecker/plasma-runner-spellchecker_config.desktop
+--- applets/weatherstation/weatherstation.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/weatherstation/weatherstation.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -45,12 +45,22 @@
+ {
+     m_lcd = new LCD(this);
+     m_lcd->setSvg("weatherstation/lcd");
+-    // So we don't show in panel
+-    m_lcd->setMinimumSize(m_lcd->preferredSize() / 2);
++    // i18n: This and other all-caps messages are pieces of text shown on
++    // an LCD-like image mimicking a electronic weather station display.
++    // If weather station displays in your country are always in English,
++    // you may want to consider leaving these strings in English too,
++    // to achieve a more realistic feeling.
++    m_lcd->setLabel("pressure-label", i18n("PRESSURE"));
++    m_lcd->setLabel("weather-label", i18n("CURRENT WEATHER"));
++    m_lcd->setLabel("temperature-label", i18n("OUTDOOR TEMP"));
++    m_lcd->setLabel("humidity-label", i18n("HUMIDITY"));
++    m_lcd->setLabel("wind-label", i18n("WIND"));
++    m_lcd->setLabel("provider-label", QString());
+     connect(m_lcd, SIGNAL(clicked(const QString&)), this, SLOT(clicked(const QString&)));
+ 
+     m_lcdPanel = new LCD(this);
+     m_lcdPanel->setSvg("weatherstation/lcd_panel");
++    m_lcdPanel->setLabel("temperature-label", i18n("OUTDOOR TEMP"));
+     m_lcdPanel->hide();
+ 
+     //m_lcd->setItemOn("under_construction");
+@@ -144,13 +154,13 @@
+         setWind(value(data["Wind Speed"].toString(),
+                 WeatherUtils::getUnitString(data["Wind Speed Unit"].toInt(), true)),
+                 data["Wind Direction"].toString());
+-        m_lcd->setLabel("label0", data["Credit"].toString());
++        m_lcd->setLabel("provider-label", data["Credit"].toString());
+         m_url = data["Credit Url"].toString();
+-        m_lcd->setItemClickable("label0", !m_url.isEmpty());
++        m_lcd->setItemClickable("provider-click", !m_url.isEmpty());
+ 
+         if (m_showToolTip) {
+             Plasma::ToolTipContent ttc(data["Place"].toString(),
+-                    i18n("Last updated: ") + QDateTime::currentDateTime().toString());
++                    i18n("Last updated: %1", KGlobal::locale()->formatDateTime(QDateTime::currentDateTime(), KLocale::FancyLongDate)));
+             Plasma::ToolTipManager::self()->setContent(this, ttc);
+         }
+     }
+@@ -224,9 +234,10 @@
+     current = fromCondition(condition);
+     m_lcd->setGroup("weather", current);
+ 
+-    QString s = fitValue(Conversion::Converter::self()->convert(pressure, pressureUnit()), 5);
++    Conversion::Value value = Conversion::Converter::self()->convert(pressure, pressureUnit());
++    QString s = fitValue(value, 5);
+     m_lcd->setNumber("pressure", s);
+-    m_lcd->setGroup("pressure_unit", QStringList() << pressureUnit());
++    m_lcd->setLabel("pressure-unit-label", value.unit()->symbol());
+ 
+     qreal t;
+     if (tendencyString.toLower() == "rising") {
+@@ -249,8 +260,8 @@
+ void WeatherStation::setTemperature(const Conversion::Value& temperature)
+ {
+     Conversion::Value v = Conversion::Converter::self()->convert(temperature, temperatureUnit());
+-    m_lcd->setGroup("temp_unit", QStringList() << temperatureUnit());
+-    m_lcdPanel->setGroup("temp_unit", QStringList() << temperatureUnit());
++    m_lcd->setLabel("temperature-unit-label", v.unit()->symbol());
++    m_lcdPanel->setLabel("temperature-unit-label", v.unit()->symbol());
+     m_lcd->setNumber("temperature", fitValue(v , 4));
+     m_lcdPanel->setNumber("temperature", fitValue(v , 3));
+     setLCDIcon();
+@@ -269,7 +280,8 @@
+ void WeatherStation::setWind(const Conversion::Value& speed, const QString& dir)
+ {
+     //kDebug() << speed.number() << speed.unit()->symbol() << dir;
+-    QString s = fitValue(Conversion::Converter::self()->convert(speed, speedUnit()), 3);
++    Conversion::Value value = Conversion::Converter::self()->convert(speed, speedUnit());
++    QString s = fitValue(value, 3);
+ 
+     if (dir == "N/A") {
+         m_lcd->setGroup("wind", QStringList());
+@@ -277,7 +289,7 @@
+         m_lcd->setGroup("wind", QStringList() << dir);
+     }
+     m_lcd->setNumber("wind_speed", s);
+-    m_lcd->setGroup("wind_unit", QStringList() << speedUnit());
++    m_lcd->setLabel("wind-unit-label", value.unit()->symbol());
+ }
+ 
+ void WeatherStation::clicked(const QString &name)
+Index: applets/weatherstation/lcd.cpp
 ===================================================================
---- runners/spellchecker/plasma-runner-spellchecker_config.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ runners/spellchecker/plasma-runner-spellchecker_config.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -21,7 +21,7 @@
- Name[ga]=Feidhmitheoir an Litreora
- Name[gl]=Executor de comprobación da ortografía
- Name[he]=בודק האיות
--Name[it]=Lanciatore del controllo ortografico
-+Name[it]=Esegue il controllo ortografico
- Name[ja]=スペルチェッカー
- Name[km]=កម្មវិធី​រត់​កម្មវិធីពិនិត្យអក្ខរាវិរុទ្ធ
- Name[ku]=Xebatkarê Kontrola Rastnivîsê
-Index: runners/spellchecker/plasma-runner-spellchecker.desktop
+--- applets/weatherstation/lcd.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/weatherstation/lcd.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -39,12 +39,13 @@
+         // lcd numbers did not look good with that.
+         KSvgRenderer svg;
+         bool dirty;
++        bool xmlDirty;
+         QPixmap img;
+         QStringList items;
+         QMap<QString, QStringList> groups;
+-        QHash<QString, QColor> colors;
+-        QHash<QString, QString> labels;
++        QHash<QString, QDomText> texts;
+         QStringList clickable;
++        QDomDocument doc;
+ 
+         static const QString A;
+         static const QString B;
+@@ -149,39 +150,43 @@
+             return r;
+         }
+ 
+-        void updateImage()
++        void checkIfDirty()
+         {
+-            if (l->size().toSize() != img.size()) {
+-                img = QPixmap(l->size().toSize());
++            if (xmlDirty) {
++                //kDebug() << "xml dirty";
++                svg.load(doc.toByteArray(0));
++                xmlDirty = false;
+             }
+-            img.fill(Qt::transparent);
++            if (dirty || (l->size().toSize() != img.size() && l->size().toSize() != QSize(0, 0))) {
++                //kDebug() << "Making bitmap" << l->size();
++                if (l->size().toSize() != img.size()) {
++                    img = QPixmap(l->size().toSize());
++                }
++                img.fill(Qt::transparent);
+ 
+-            QPainter p(&img);
++                QPainter p(&img);
+ 
+-            xScale = l->size().width() / svg.defaultSize().width();
+-            yScale = l->size().height() / svg.defaultSize().height();
+-            p.setRenderHint(QPainter::TextAntialiasing, true);
+-            p.setRenderHint(QPainter::Antialiasing, true);
+-            p.setRenderHint(QPainter::SmoothPixmapTransform, true);
++                xScale = l->size().width() / svg.defaultSize().width();
++                yScale = l->size().height() / svg.defaultSize().height();
++                p.setRenderHint(QPainter::TextAntialiasing, true);
++                p.setRenderHint(QPainter::Antialiasing, true);
++                p.setRenderHint(QPainter::SmoothPixmapTransform, true);
+ 
+-            p.save();
+-            p.scale(l->size().width() / svg.defaultSize().width(),
+-                    l->size().height() / svg.defaultSize().height());
++                p.save();
++                p.scale(l->size().width() / svg.defaultSize().width(),
++                        l->size().height() / svg.defaultSize().height());
+ 
+-            foreach (const QString& item, items) {
+-                paint(&p, item);
++                foreach (const QString& item, items) {
++                    paint(&p, item);
++                }
++                p.restore();
++                dirty = false;
+             }
+-            p.restore();
+-            foreach (const QString& label, labels.keys()) {
+-                text(&p, label);
+-            }
+-            dirty = false;
+         }
+ 
+         void parseXml()
+         {
+             QIODevice *device = KFilterDev::deviceForFile(content, "application/x-gzip");
+-            QDomDocument doc;
+ 
+             doc.setContent(device);
+             QList<QDomNodeList> lists;
+@@ -196,13 +201,22 @@
+                     QString id = element.attribute("id");
+                     if ((pos = id.lastIndexOf(':')) > -1) {
+                         groups[id.left(pos)] << id.mid(pos + 1);
+-                    } else if (element.tagName() == "rect") {
+-                        if (rx.indexIn(element.attribute("style")) > -1) {
+-                            colors[id] = QColor(rx.cap(1));
+-                        }
+                     }
+                 }
+             }
++            QDomNodeList list = doc.elementsByTagName("text");
++            for (int i = 0; i < list.count(); ++i) {
++                QDomElement element = list.item(i).toElement();
++                QDomNodeList l = element.elementsByTagName("tspan");
++                QDomElement e = l.item(0).toElement();
++                for (QDomNode n = e.firstChild(); !n.isNull(); n = n.nextSibling()) {
++                    QDomText t = n.toText();
++                    if (!t.isNull()) {
++                        texts[element.attribute("id")] = t;
++                    }
++                }
++            }
++
+             //kDebug() << groups;
+             delete device;
+         }
+@@ -222,35 +236,6 @@
+             }
+             return result;
+         }
+-
+-        void text(QPainter *p, const QString elementID)
+-        {
+-            QString text = labels[elementID];
+-
+-            if (svg.elementExists(elementID)) {
+-                QRectF elementRect = scaledRect(elementID);
+-                Qt::Alignment align = Qt::AlignCenter;
+-
+-                p->setPen(QPen(colors[elementID]));
+-                p->setFont(fitText(p, text, elementRect));
+-                if (elementRect.width() > elementRect.height()) {
+-                    p->drawText(elementRect, align, text);
+-                } else {
+-                    p->save();
+-                    QPointF rotateCenter(
+-                            elementRect.left() + elementRect.width() / 2,
+-                            elementRect.top() + elementRect.height() / 2);
+-                    p->translate(rotateCenter);
+-                    p->rotate(-90);
+-                    p->translate(elementRect.height() / -2,
+-                                elementRect.width() / -2);
+-                    QRectF r(0, 0, elementRect.height(), elementRect.width());
+-                    p->drawText(r, align, text);
+-                    p->restore();
+-                }
+-                //p->drawRect(elementRect);
+-            }
+-        }
+ };
+ 
+ QMap<QChar, QStringList> LCD::Private::sevenSegmentDigits;
+@@ -287,10 +272,9 @@
+     } else {
+         d->content = Plasma::Theme::defaultTheme()->imagePath(svg);
+     }
+-    d->svg.load(d->content);
+     d->parseXml();
+-    setPreferredSize(d->svg.defaultSize());
+     d->dirty = true;
++    d->xmlDirty = true;
+     update();
+ }
+ 
+@@ -304,9 +288,7 @@
+     Q_UNUSED(option)
+     Q_UNUSED(widget)
+ 
+-    if (d->dirty || size().toSize() != d->img.size()) {
+-        d->updateImage();
+-    }
++    d->checkIfDirty();
+     p->drawPixmap(0, 0, d->img);
+ }
+ 
+@@ -386,19 +368,20 @@
+ 
+ void LCD::setLabel(const QString &name, const QString &text)
+ {
+-    d->labels[name] = text;
++    if (d->texts[name].data() != text) {
++        d->texts[name].setData(text);
++        d->xmlDirty = true;
++    }
+ }
+ 
+ QString LCD::label(const QString &name) const
+ {
+-    return d->labels[name];
++    return d->texts[name].data();
+ }
+ 
+ QPixmap LCD::toPixmap()
+ {
+-    if (d->dirty || size().toSize() != d->img.size()) {
+-        d->updateImage();
+-    }
++    d->checkIfDirty();
+     return d->img;
+ }
+ 
+@@ -431,4 +414,18 @@
+     }
+ }
+ 
++QSizeF LCD::sizeHint(Qt::SizeHint which, const QSizeF& constraint) const
++{
++    QSizeF s = QGraphicsWidget::sizeHint(which, constraint);
++    d->checkIfDirty();
++    if (which == Qt::PreferredSize) {
++        s = d->svg.defaultSize();
++    } else if (which == Qt::MinimumSize) {
++        s = d->svg.defaultSize() / 2;
++    } else {
++        s = QGraphicsWidget::sizeHint(which, constraint);
++    }
++    return s;
++}
++
+ #include "lcd.moc"
+Index: applets/weatherstation/lcd.h
 ===================================================================
---- runners/spellchecker/plasma-runner-spellchecker.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ runners/spellchecker/plasma-runner-spellchecker.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -14,7 +14,7 @@
- Name[ga]=Feidhmitheoir an Litreora
- Name[gl]=Executor de comprobación da ortografía
- Name[he]=בודק האיות
--Name[it]=Lanciatore del controllo ortografico
-+Name[it]=Esegue il controllo ortografico
- Name[ja]=スペルチェッカー
- Name[km]=កម្មវិធី​រត់​កម្មវិធីពិនិត្យអក្ខរាវិរុទ្ធ
- Name[ku]=Xebatkarê Kontrola Rastnivîsê
-@@ -53,7 +53,7 @@
- Comment[ga]=Seiceáil litriú focail
- Comment[gl]=Comproba a ortografía dunha palabra
- Comment[he]=בודק איות של מילה
--Comment[it]=Controlla l'ortografia delle parole
-+Comment[it]=Controlla l'ortografia di una parola
- Comment[ja]=単語のスペルをチェックします
- Comment[km]=ពិនិត្យ​មើល​កា​រប្រកប​ពាក្យ
- Comment[ku]=Rastnivîsa peyvekê kontrol dike
-Index: runners/contacts/plasma-runner-contacts.desktop
+--- applets/weatherstation/lcd.h	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/weatherstation/lcd.h	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -139,14 +139,15 @@
+      * Reimplemented from QGraphicsWidget
+      */
+     void paint(QPainter *p, const QStyleOptionGraphicsItem *option, QWidget *widget);
+-    
++
+ signals:
+     void clicked(const QString &name);
+ 
+ protected:
+     virtual void hoverMoveEvent(QGraphicsSceneHoverEvent* event);
+     virtual void mousePressEvent(QGraphicsSceneMouseEvent* event);
+-    
++    virtual QSizeF sizeHint(Qt::SizeHint which, const QSizeF& constraint = QSizeF()) const;
++
+ private:
+     class Private;
+     Private * const d;
+Index: applets/weatherstation/lcd_panel.svgz
 ===================================================================
---- runners/contacts/plasma-runner-contacts.desktop	(.../tags/KDE/4.2.1/kdeplasma-addons)	(wersja 943487)
-+++ runners/contacts/plasma-runner-contacts.desktop	(.../branches/KDE/4.2/kdeplasma-addons)	(wersja 943487)
-@@ -53,7 +53,7 @@
- Comment[et]=Kirjete otsimine aadressiraamatust
- Comment[eu]=Zure helbide liburuan sarrerak aurkitzen ditu
- Comment[fi]=Etsii yhteystietoja osoitekirjasta
--Comment[fr]=Trouve des entrées dans votre carnet d'adresse
-+Comment[fr]=Trouve des entrées dans votre carnet d'adresses
- Comment[ga]=Aimsigh teagmhálacha i do leabhar seoltaí
- Comment[gl]=Encontra entradas no seu caderno de enderezos
- Comment[he]=מצא רשומות מתוך האנשי קשר שלך
+Nie można wyświetlić: plik binarny.
+svn:mime-type = application/octet-stream
+Index: applets/weatherstation/lcd.svgz
+===================================================================
+Nie można wyświetlić: plik binarny.
+svn:mime-type = application/octet-stream
+Index: applets/bubblemon/plasma-applet-bubblemon.desktop
+===================================================================
+--- applets/bubblemon/plasma-applet-bubblemon.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/bubblemon/plasma-applet-bubblemon.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -28,6 +28,7 @@
+ Comment[nds]=En smuck Blaas, de Dien Systeem bekieken deit
+ Comment[nl]=Een prachtige bubbel die uw systeem monitort.
+ Comment[nn]=Fin boble som overvaker systemet
++Comment[pl]=Bąbelek monitorujący system.
+ Comment[pt]=Uma bolha bonita que vigia o seu sistema.
+ Comment[pt_BR]=Uma bonita bolha que monitora o seu sistema.
+ Comment[ro]=Un balon drăguț ce vă monitorizează sistemul.
+@@ -36,6 +37,7 @@
+ Comment[sr]=Пријатни балон који надзире систем.
+ Comment[sr@latin]=Prijatni balon koji nadzire sistem.
+ Comment[sv]=En snygg bubbla som övervakar systemet.
++Comment[tr]=Sisteminizi izleyen sevimli bir baloncuk.
+ Comment[uk]=Гарненька бульбашка, яка спостерігає за вашою системою.
+ Comment[wa]=Ene djoleye bouye ki corwaite vosse sistinme.
+ Comment[x-test]=xxA pretty bubble that monitors your system.xx
+Index: applets/systemloadviewer/plasma-applet-systemloadviewer.desktop
+===================================================================
+--- applets/systemloadviewer/plasma-applet-systemloadviewer.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/systemloadviewer/plasma-applet-systemloadviewer.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -22,6 +22,7 @@
+ Name[nl]=Systeembelastingweergave
+ Name[nn]=Systemlast-oversikt
+ Name[pa]=ਸਿਸਟਮ ਲੋਡ ਦਰਸ਼ਕ
++Name[pl]=Przeglądarka obciążenia systemu
+ Name[pt]=Visualizador da Carga do Sistema
+ Name[pt_BR]=Visualizador de carga do sistema
+ Name[ro]=Vizualizator încărcare sistem
+@@ -58,6 +59,7 @@
+ Comment[nl]=Kleine CPU/RAM/Swap-monitor
+ Comment[nn]=Overvak prosessor, minne og veksleminne
+ Comment[pa]=ਨਿੰਮਾ CPU/RAM/ਸਵੈਪ ਮਾਨੀਟਰ
++Comment[pl]=Mały monitor procesora/pamięci
+ Comment[pt]=Monitor minúsculo de CPU/RAM/Memória Virtual
+ Comment[pt_BR]=Pequeno monitor do CPU/RAM/Swap
+ Comment[ro]=Monitor minuscul pentru procesor/memorie/swap
+Index: applets/unitconverter/plasma-applet-unitconverter.desktop
+===================================================================
+--- applets/unitconverter/plasma-applet-unitconverter.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/unitconverter/plasma-applet-unitconverter.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -67,6 +67,7 @@
+ Comment[nl]=Plasmoid voor eenheden converteren
+ Comment[nn]=Konverter mellom ulike einingar
+ Comment[pa]=ਯੂਨਿਟ ਬਦਲਣ ਲਈ ਪਲਾਜ਼ਮੋਇਡ
++Comment[pl]=Plazmoid do konwersji jednostek
+ Comment[pt]=Plasmóide para converter unidades
+ Comment[pt_BR]=Plasmóide para converter unidades
+ Comment[ro]=Plasmoid pentru conversia unităților
+Index: applets/previewer/plasma-previewer.cpp
+===================================================================
+--- applets/previewer/plasma-previewer.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/previewer/plasma-previewer.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -55,6 +55,7 @@
+       m_base(0),
+       m_dialog(0),
+       m_part(0),
++      m_currentFile(QString()),
+       m_previewWidget(0)
+ {
+     new PreviewerAdaptor(this);
+@@ -68,6 +69,10 @@
+     setAcceptDrops(true);
+ 
+     resize(PreviewWidget::suggestedWidth(), 150);
++    if (args.count()) {
++        kDebug() << "Opening file from arg passed into applet ..." << args.value(0).toString();
++        m_currentFile = args.value(0).toString();
++    }
+ }
+ 
+ Previewer::~Previewer()
+@@ -99,6 +104,9 @@
+ {
+     setPopupIcon("previewer");
+     setupActions();
++    if (!m_currentFile.isEmpty()) {
++        openFile(m_currentFile);
++    }
+ }
+ 
+ void Previewer::constraintsEvent(Plasma::Constraints constraints)
+@@ -257,7 +265,7 @@
+     m_dialog->setWindowFlags(Qt::FramelessWindowHint);
+     m_dialog->show();
+ 
+-    int buttonCode = KMessageBox::questionYesNo(m_dialog, i18n("Are you sure you want to remove:\n%1", cur.pathOrUrl()), 
++    int buttonCode = KMessageBox::questionYesNo(m_dialog, i18n("Are you sure you want to remove:\n%1", cur.pathOrUrl()),
+                                                   i18n("Deleting File"));
+ 
+     m_dialog->setWindowFlags(Qt::X11BypassWindowManagerHint);
+Index: applets/news/news.css
+===================================================================
+--- applets/news/news.css	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/news/news.css	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -1,13 +1,13 @@
+-.header { font-size:11pt; font-weight:bold; color:#fcfcfc; background-color:#4f4f4f; }
+-.date { font-size:10pt; font-weight:bold; color:#fcfcfc; background-color:#333333; }
+-.line-0 { font-size:10pt; color:#fcfcfc; background-color:#0f0f0f; }
+-.line-1 { font-size:10pt; color:#fcfcfc; background-color:#2f2f2f; }
+-.time { font-size:7pt; color:#cccccc; padding-top:3px; }
++.header { font-size:11pt; font-weight:bold; color:#000; background-color:rgba(255,255,255,0.45); }
++.date { font-size:10pt; font-weight:bold; color:#000; background-color:rgba(255,255,255,0.45); }
++.line-0 { font-size:10pt; color:#000; background-color:rgba(255,255,255,0.25); }
++.line-1 { font-size:10pt; color:#000; background-color:transparent; }
++.time { font-size:7pt; color:#555; padding-top:3px; }
+ .title, .description { }
+ .description { font-size:9pt; }
+ .text { width:100%; }
+ .title_with_description { font-weight:bold; }
+-a { text-decoration:none; color:#fcfcfc; }
++a { text-decoration:none; color:#222; }
+ table { width:100%; border-spacing:0px; }
+ td { vertical-align: top; }
+-body { margin:0px; background-color:#000000 }
++body { margin:0px; background-color:transparent }
+Index: applets/rememberthemilk/plasma-applet-rememberthemilk.desktop
+===================================================================
+--- applets/rememberthemilk/plasma-applet-rememberthemilk.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/rememberthemilk/plasma-applet-rememberthemilk.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -32,6 +32,7 @@
+ Comment[nds]=Opgavenlist-Lüttprogramm "Dor An Denken"
+ Comment[nl]=Applet voor takenlijst van The Milk onthouden
+ Comment[nn]=Hugselista Remember The Milk
++Comment[pl]=Lista rzeczy do zrobienia Remember The Milk
+ Comment[pt]='Applet' de lista de tarefas e itens por-fazer
+ Comment[pt_BR]=Miniaplicativo de lista de tarefas do Remember The Milk
+ Comment[ro]=Miniaplicație cu listă de sarcini Nu uita laptele
+Index: applets/notes/notes.cpp
+===================================================================
+--- applets/notes/notes.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/notes/notes.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -411,7 +411,13 @@
+         const qreal ypad = geometry().height() / 15;
+         m_layout->setContentsMargins(xpad, ypad, xpad, ypad);
+         m_font.setPointSize(fontSize());
+-        m_textEdit->nativeWidget()->setFont(m_font);
++
++        QString cssWeight = m_font.bold() ? "bold" : "normal";
++        QString cssStyle = m_font.italic() ? "italic" : "normal";
++        QString cssSize = QString::number(m_font.pointSize()) + QString("pt");
++        QString css = QString("QTextEdit { font-family:%1; font-size:%2; font-weight:%3;"
++        "font-style:%4; }").arg(m_font.family(), cssSize, cssWeight, cssStyle);
++        m_textEdit->nativeWidget()->setStyleSheet(css);
+     }
+ }
+ 
+@@ -560,7 +566,6 @@
+         cg.writeEntry("font", newFont);
+         m_font = newFont;
+         m_font.setPointSize(fontSize());
+-        m_textEdit->nativeWidget()->setFont(newFont);
+     }
+ 
+     if (m_customFontSize != ui.customFontSizeSpinBox->value()) {
+Index: applets/calculator/plasma-applet-calculator.desktop
+===================================================================
+--- applets/calculator/plasma-applet-calculator.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/calculator/plasma-applet-calculator.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -30,7 +30,6 @@
+ Name[nn]=Kalkulator
+ Name[oc]=Calculeta
+ Name[pa]=ਕੈਲਕੂਲੇਟਰ
+-Name[pl]=Kalkulator
+ Name[pt]=Calculadora
+ Name[pt_BR]=Calculadora
+ Name[ru]=Калькулятор
+Index: applets/rssnow/news.cpp
+===================================================================
+--- applets/rssnow/news.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/rssnow/news.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -263,6 +263,8 @@
+     if (m_logo) {
+         m_layout->addItem(m_header);
+         m_header->show();
++    } else {
++        m_header->hide();
+     }
+ 
+     qDeleteAll(m_scrollerList);
+@@ -336,6 +338,7 @@
+ 
+             KConfigGroup cg = config();
+             cg.writeEntry("feeds", m_feedlist);
++            emit configNeedsSaving();
+ 
+             updateScrollers();
+             connectToEngine();
+@@ -345,12 +348,12 @@
+ 
+ void News::constraintsEvent(Plasma::Constraints constraints)
+ {
+-    kDebug() << "constrainsUpdated : " << constraints;
++    //kDebug() << "constrainsUpdated : " << constraints;
+     if (constraints & Plasma::FormFactorConstraint || constraints & Plasma::SizeConstraint ) {
+         if (formFactor() == Plasma::Horizontal) {
+             int minSize = (m_feedlist.size() * m_scrollerList.first()->minimumSize().height()) + m_header->size().height();
+-            kDebug() << "minimum size to contain all scrollers: " << minSize;
+-            if (geometry().height() < minSize && !m_collapsed) {
++            //kDebug() << "minimum size to contain all scrollers: " << minSize << m_feedlist;
++            if (contentsRect().height() < minSize) {
+                 //group all feeds together so it can fit (only a single time):
+                 QString allfeeds;
+                 foreach (const QString &feed, m_feedlist) {
+@@ -367,7 +370,10 @@
+                 m_collapsed = true;
+                 updateScrollers();
+             } else {
+-                //TODO: restore default settings.
++                m_collapsed = false;
++                m_logo = config().readEntry("logo", true);
++                m_feedlist = config().readEntry("feeds", QStringList("http://dot.kde.org/rss.xml"));
++                updateScrollers();
+             }
+         }
+     }
+Index: applets/rssnow/single-feed.cpp
+===================================================================
+--- applets/rssnow/single-feed.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/rssnow/single-feed.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -26,6 +26,7 @@
+ #include <kdebug.h>
+ #include <kicon.h>
+ #include <kcursor.h>
++#include <kglobalsettings.h>
+ 
+ //Plasma
+ #include <plasma/svg.h>
+@@ -50,9 +51,6 @@
+     m_background = new Plasma::Svg(this);
+     m_background->setImagePath("rssnow/background");
+ 
+-    QFont font = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+-    font.setPointSize(font.pointSize() - 2); //because it looks prettier, but
+-
+     //ok, so why use a QGraphicsTextItem and not display it? It causes a lot of
+     //clipping issues, so it's easier to only use the convert to plain text
+     //functionality of QGraphicsTextItem. TODO: find a more direct and elegant
+@@ -75,10 +73,7 @@
+     qreal width = m_rect.width();
+ 
+     p->setRenderHint(QPainter::Antialiasing);
+-    QFont font = Plasma::Theme::defaultTheme()->font(Plasma::Theme::DefaultFont);
+-    // FIXME: currently there is nothing else than DefaultFont for Theme
+-    // so we calculate the size
+-    font.setPixelSize(height/5); 
++    QFont font = KGlobalSettings::smallestReadableFont();
+ 
+     //paint background
+     m_background->paint(p, 0, 0);
+Index: applets/weather/plasma-applet-weather.desktop
+===================================================================
+--- applets/weather/plasma-applet-weather.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/weather/plasma-applet-weather.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -24,6 +24,7 @@
+ Name[nl]=Weersvoorspelling
+ Name[nn]=Vêrmelding
+ Name[pa]=ਮੌਸਮ ਭਵਿੱਖਬਾਣੀ
++Name[pl]=Prognoza pogody
+ Name[pt]=Previsão Meteorológica
+ Name[pt_BR]=Previsão meteorológica
+ Name[ro]=Prognoza vremii
+@@ -61,6 +62,7 @@
+ Comment[nl]=Toont weerinformatie
+ Comment[nn]=Vis vêrinformasjon
+ Comment[pa]=ਮੌਸਮ ਜਾਣਕਾਰੀ ਵੇਖੋ
++Comment[pl]=Pokazuje informacje o pogodzie
+ Comment[pt]=Mostra informações meteorológicas
+ Comment[pt_BR]=Exibe informações meteorológicas
+ Comment[ro]=Afișează informații meteorologice
+Index: applets/pastebin/plasma_pastebin.notifyrc
+===================================================================
+--- applets/pastebin/plasma_pastebin.notifyrc	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/pastebin/plasma_pastebin.notifyrc	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -37,6 +37,7 @@
+ Comment[nl]=Pastebin-widget
+ Comment[nn]=Teksttavle-element
+ Comment[pa]=ਪੇਸਟਬਿਨ ਵਿਦਗੈਟ
++Comment[pl]=Element interfejsu: Pastebin
+ Comment[pt]=Item de Colagem
+ Comment[pt_BR]=Widget do Pastebin
+ Comment[ro]=Control Coș de lipire
+@@ -76,6 +77,7 @@
+ Name[nds]=Pastebin-Link kopeert
+ Name[nl]=Pastebin-koppeling gekopieerd
+ Name[nn]=Kopiert teksttavle-lenkje
++Name[pl]=Skopiowany odnośnik pastebin
+ Name[pt]=Ligação do PasteBin copiada
+ Name[pt_BR]=Link do pastebin copiado
+ Name[ro]=Legătura pentru Coșul de lipire copiată
+@@ -111,6 +113,7 @@
+ Comment[nds]=De Pastebin-URL wöör na de Twischenaflaag kopeert
+ Comment[nl]=De pastebin-URL is gekopieerd naar het klembord
+ Comment[nn]=Teksttavle-adressa er kopiert til utklippstavla
++Comment[pl]=Adres pastebin został skopiowany do schowka
+ Comment[pt]=O URL do PasteBin foi copiado para a área de transferência
+ Comment[pt_BR]=O URL do pastebin foi copiado para a área de transferência
+ Comment[ro]=URL-ul coșului de lipire a fost copiat în clipboard
+Index: applets/microblog/plasma-applet-microblog.desktop
+===================================================================
+--- applets/microblog/plasma-applet-microblog.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ applets/microblog/plasma-applet-microblog.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -17,6 +17,7 @@
+ Name[nds]=Mikronettdagbook
+ Name[nn]=Mikroblogging
+ Name[pa]=ਮਾਈਕਰੋਬਲਾਗ
++Name[pl]=Mikroblog
+ Name[pt]=Micro-blog
+ Name[pt_BR]=Micro-blog
+ Name[sk]=Mikroblogovanie
+@@ -50,6 +51,7 @@
+ Comment[nds]=Dien Mikronettdaagbook-Status opfrischen un ankieken
+ Comment[nl]=Werk uw microblogstatus bij bekijk deze.
+ Comment[nn]=Oppdater og vis mikrobloggstatusen din
++Comment[pl]=Uaktualnianie i przeglądanie statusu mikrobloga.
+ Comment[pt]=Actualizar e ver o estado do seu micro-blog.
+ Comment[pt_BR]=Atualizar e exibir o status do seu micro-blog.
+ Comment[ro]=Actualizați și vizualizați-vă starea pe microblog.
+Index: wallpapers/weather/plasma-wallpaper-weather.desktop
+===================================================================
+--- wallpapers/weather/plasma-wallpaper-weather.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/weather/plasma-wallpaper-weather.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -23,6 +23,7 @@
+ Name[nl]=Weer
+ Name[nn]=Vêr
+ Name[pa]=ਮੌਸਮ
++Name[pl]=Pogoda
+ Name[pt]=Meteorologia
+ Name[pt_BR]=Previsão do tempo
+ Name[ro]=Vreme
+Index: wallpapers/marble/plasma-wallpaper-marble.desktop
+===================================================================
+--- wallpapers/marble/plasma-wallpaper-marble.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/marble/plasma-wallpaper-marble.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -19,6 +19,7 @@
+ Name[nds]=Eer
+ Name[nn]=Globus
+ Name[pa]=ਗਲੋਬ
++Name[pl]=Glob
+ Name[pt]=Globo
+ Name[pt_BR]=Globo
+ Name[ro]=Glob
+Index: wallpapers/virus/plasma-wallpaper-virus.desktop
+===================================================================
+--- wallpapers/virus/plasma-wallpaper-virus.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/virus/plasma-wallpaper-virus.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -9,6 +9,7 @@
+ Name[km]=វីរុស
+ Name[lv]=Vīruss
+ Name[pa]=ਵਾਈਰਸ
++Name[pl]=Wirus
+ Name[pt]=Vírus
+ Name[pt_BR]=Vírus
+ Name[sk]=Vírus
+Index: wallpapers/virus/virus.cpp
+===================================================================
+--- wallpapers/virus/virus.cpp	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/virus/virus.cpp	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -54,7 +54,7 @@
+ Virus::~Virus()
+ {
+     alife.exit(0);
+-    while(!alife.isFinished()) ;
++    alife.wait();
+ }
+ 
+ void Virus::init(const KConfigGroup &config)
+Index: wallpapers/pattern/patterns/pavement.desktop
+===================================================================
+--- wallpapers/pattern/patterns/pavement.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/pavement.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -19,6 +19,7 @@
+ Comment[nds]=Stieg
+ Comment[nl]=Bestrating
+ Comment[nn]=Fortau
++Comment[pl]=Ścieżka
+ Comment[pt]=Calçada
+ Comment[pt_BR]=Pavimento
+ Comment[ro]=Pavaj
+Index: wallpapers/pattern/patterns/flowers.desktop
+===================================================================
+--- wallpapers/pattern/patterns/flowers.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/flowers.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -20,6 +20,7 @@
+ Comment[nl]=Bloemen
+ Comment[nn]=Blomar
+ Comment[pa]=ਫੁੱਲ
++Comment[pl]=Kwiaty
+ Comment[pt]=Flores
+ Comment[pt_BR]=Flores
+ Comment[ro]=Flori
+Index: wallpapers/pattern/patterns/triangles.desktop
+===================================================================
+--- wallpapers/pattern/patterns/triangles.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/triangles.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -18,6 +18,7 @@
+ Comment[nl]=Driehoeken
+ Comment[nn]=Trekantar
+ Comment[pa]=ਤਿਕੋਣਾਂ
++Comment[pl]=Trójkąty
+ Comment[pt]=Triângulos
+ Comment[pt_BR]=Triângulos
+ Comment[ro]=Triunghiuri
+Index: wallpapers/pattern/patterns/fish.desktop
+===================================================================
+--- wallpapers/pattern/patterns/fish.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/fish.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -20,6 +20,7 @@
+ Comment[nl]=Visnet
+ Comment[nn]=Fiskegarn
+ Comment[pa]=ਫਿਸ਼ ਨੈੱਟ
++Comment[pl]=Sieć na ryby
+ Comment[pt]=Rede de Pesca
+ Comment[pt_BR]=Rede de pesca
+ Comment[ro]=Plasă pescărească
+Index: wallpapers/pattern/patterns/stonewall2.desktop
+===================================================================
+--- wallpapers/pattern/patterns/stonewall2.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/stonewall2.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -17,6 +17,7 @@
+ Comment[nds]=Steenmuur 2 vun Tigert
+ Comment[nl]=Stenen muur 2, door Tigert
+ Comment[nn]=Steinmur 2 av Tigert
++Comment[pl]=Stonewall 2, autor: Tigert
+ Comment[pt]=Stonewall 2 de Tigert
+ Comment[pt_BR]=Parede de pedras 2 por Tigert
+ Comment[ro]=Stonewall 2 de Tigert
+Index: wallpapers/pattern/patterns/night-rock.desktop
+===================================================================
+--- wallpapers/pattern/patterns/night-rock.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/patterns/night-rock.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -19,6 +19,7 @@
+ Comment[nds]=Nachtrock vun Tigert
+ Comment[nl]=Night Rock, door Tigert
+ Comment[nn]=Nattfjell av Tigert
++Comment[pl]=Night Rock, autor:Tigert
+ Comment[pt]=Night Rock de Tigert
+ Comment[pt_BR]=Rocha noturna por Tigert
+ Comment[ro]=Stîncă nocturnă de Tigert
+Index: wallpapers/pattern/plasma-wallpaper-pattern.desktop
+===================================================================
+--- wallpapers/pattern/plasma-wallpaper-pattern.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ wallpapers/pattern/plasma-wallpaper-pattern.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -22,6 +22,7 @@
+ Name[nl]=Patroon
+ Name[nn]=Mønster
+ Name[pa]=ਪੈਟਰਨ
++Name[pl]=Wzór
+ Name[pt]=Padrão
+ Name[pt_BR]=Padrão
+ Name[ro]=Model
+Index: runners/browserhistory/browserhistory.desktop
+===================================================================
+--- runners/browserhistory/browserhistory.desktop	(.../tags/KDE/4.3.0/kdeplasma-addons)	(wersja 1013413)
++++ runners/browserhistory/browserhistory.desktop	(.../branches/KDE/4.3/kdeplasma-addons)	(wersja 1013413)
+@@ -21,6 +21,7 @@
+ Name[nl]=Webbrowser-geschiedenis
+ Name[nn]=Nettlesarlogg
+ Name[pa]=ਵੈੱਬ ਬਰਾਊਜ਼ਰ ਅਤੀਤ
++Name[pl]=Historia przeglądarki
+ Name[pt]=Histórico do Navegador Web
+ Name[pt_BR]=Histórico do navegador da Internet
+ Name[ro]=Istoricul navigatorului web
