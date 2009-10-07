@@ -1,13 +1,20 @@
-diff -ur kdeplasma-addons-4.2.87svn969966/applets/pastebin/backends/pastebincom.cpp kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends/pastebincom.cpp
---- kdeplasma-addons-4.2.87svn969966/applets/pastebin/backends/pastebincom.cpp	2009-02-26 10:13:10.000000000 +0100
-+++ kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends/pastebincom.cpp	2009-05-26 23:35:14.059626384 +0200
-@@ -25,7 +25,7 @@
- PastebinCOMServer::PastebinCOMServer(KConfigGroup config)
-     : PastebinServer()
- {
--    m_server = config.readEntry("pastebincom", "http://pastebin.com");
-+    m_server = config.readEntry("pld.pastebincom", "http://pld.pastebin.com");
- }
+--- kdeplasma-addons-4.3.69svn1027298/applets/pastebin/pastebin.cpp.orig	2009-09-23 21:22:34.000000000 +0200
++++ kdeplasma-addons-4.3.69svn1027298/applets/pastebin/pastebin.cpp	2009-10-08 01:10:11.000000000 +0200
+@@ -460,7 +460,7 @@
+             break;
  
- PastebinCOMServer::~PastebinCOMServer()
-Tylko w kdeplasma-addons-4.2.87svn969966.new/applets/pastebin/backends: pastebincom.cpp~
+         case Pastebin::PASTEBINCOM:
+-           serverAddress = cg.readEntry("pastebincom", "http://pastebin.com");
++           serverAddress = cg.readEntry("pld.pastebincom", "http://pld.pastebin.com");
+            break;
+     }
+ 
+@@ -810,7 +810,7 @@
+                 break;
+ 
+             case Pastebin::PASTEBINCOM:
+-                ops.writeEntry("server", cg.readEntry("pastebincom", "http://pastebin.com"));
++                ops.writeEntry("server", cg.readEntry("pld.pastebincom", "http://pld.pastebin.com"));
+                 break;
+         }
+ 
