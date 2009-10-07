@@ -1,20 +1,25 @@
+# TODO:
+# Lancelot: installed - cmake unimplemented because not found
+#   * XRender - Lancelot compositing support
+#   * Eigen2 - Eigen2 enables the Mandelbrot wallpaper plugin.
 
 %bcond_without	marble	# don't build marble plasma support
 
 %define		orgname	kdeplasma-addons
-%define		_state	stable
+%define		_state	unstable
 %define		_qtver	4.5.2
+%define		snap	svn1027298
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.1
+Version:	4.3.69
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
-Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	282473836da35a48a6c6bee0b6fa6666
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
+Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}%{snap}.tar.bz2
+# Source0-md5:	f381a2f6073676f2ccdaee59c2c70ddd
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -39,9 +44,9 @@ BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
 BuildRequires:	strigi-devel >= 0.6.5
-BuildRequires:	xorg-lib-libXcomposite
-BuildRequires:	xorg-lib-libXdamage
-BuildRequires:	xorg-lib-libXrender
+BuildRequires:	xorg-lib-libXcomposite-devel
+BuildRequires:	xorg-lib-libXdamage-devel
+BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -83,7 +88,8 @@ Pakiet ten zawiera pliki nagłówkowe potrzebne do budowy aplikacji
 opartych na plazmoidach dla KDE4.
 
 %prep
-%setup -q -n %{orgname}-%{version}
+%setup -q -n %{orgname}-%{version}%{snap}
+#%setup -q -n %{orgname}-%{version}
 #%patch100 -p0
 %patch0 -p1
 
@@ -138,9 +144,9 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
-%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
-%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
+#%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
+#%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
+#%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
 %attr(755,root,root) %{_libdir}/liblancelot.so
 %attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
 %attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
@@ -167,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 %{_datadir}/config/comic.knsrc
+%{_datadir}/config/plasmaweather.knsrc
 %{_datadir}/config/virus_wallpaper.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
@@ -185,11 +192,13 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/ServiceMenus/preview.desktop
 %dir %{_datadir}/apps/bball
 %{_datadir}/apps/bball/bball.svgz
+%{_iconsdir}/*/*x*/apps/bball.png
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
 #%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma
 %{_datadir}/apps/plasma-applet-opendesktop
+%{_datadir}/apps/plasma-applet-frame
 %{_datadir}/apps/plasma_pastebin
 %{_datadir}/apps/plasma_wallpaper_pattern
 
@@ -199,6 +208,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
+%{_datadir}/apps/desktoptheme/oxygen/lancelot
 #%{_datadir}/apps/desktoptheme/air/
 
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
@@ -210,6 +220,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
-%{_includedir}/conversion
+#%{_includedir}/conversion
 %{_includedir}/lancelot
-%{_datadir}/apps/cmake/modules/*.cmake
+#%{_datadir}/apps/cmake/modules/*.cmake
