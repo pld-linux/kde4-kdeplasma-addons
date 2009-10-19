@@ -7,19 +7,19 @@
 
 %define		orgname	kdeplasma-addons
 %define		_state	unstable
-%define		_qtver	4.5.2
-%define		snap	svn1027298
+%define		_qtver	4.6.0
+%define		snap	svn1035674
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.69
+Version:	4.3.72
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}%{snap}.tar.bz2
-# Source0-md5:	f381a2f6073676f2ccdaee59c2c70ddd
+# Source0-md5:	50174107cefbe1e6ac3b2ae1fad2824d
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -35,10 +35,10 @@ BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.6.3
 BuildRequires:	eigen-devel >= 2.0.51
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
+%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	phonon-devel >= 4.3.1
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
@@ -183,8 +183,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/apps/desktoptheme/default/bubblemon
 %{_datadir}/apps/desktoptheme/default/bubblemon/bubble.svg
 %dir %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
-%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/greensquare.svgz
+%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/blanksquare.svg
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+%{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
+%{_iconsdir}/hicolor/scalable/apps/bball.svgz
+%{_iconsdir}/oxygen/*x*/apps/qalculate-applet.png
 
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
@@ -198,6 +201,7 @@ rm -rf $RPM_BUILD_ROOT
 #%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma
 %{_datadir}/apps/plasma-applet-opendesktop
+%{_datadir}/apps/plasma-applet-opendesktop-activities
 %{_datadir}/apps/plasma-applet-frame
 %{_datadir}/apps/plasma_pastebin
 %{_datadir}/apps/plasma_wallpaper_pattern
