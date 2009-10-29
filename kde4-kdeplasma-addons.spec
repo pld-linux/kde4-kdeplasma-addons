@@ -5,21 +5,21 @@
 
 %bcond_without	marble	# don't build marble plasma support
 
-%define		orgname	kdeplasma-addons
-%define		_state	unstable
-%define		_qtver	4.6.0
-%define		snap	svn1035674
+%define		orgname	    kdeplasma-addons
+%define		_state	    unstable
+%define		_qtver	    4.6.0
+%define		snap        svn1040395
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.72
+Version:	4.3.73
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}%{snap}.tar.bz2
-# Source0-md5:	50174107cefbe1e6ac3b2ae1fad2824d
+# Source0-md5:	89d3c3abf8a246caac25955983b1f419
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
