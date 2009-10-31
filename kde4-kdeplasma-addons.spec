@@ -8,12 +8,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.2
+Version:	4.3.3
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	ef545d02cc484d226dc6a580be11a370
+# Source0-md5:	f034c8ded22fd0029b3b4b687774c757
 #Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
