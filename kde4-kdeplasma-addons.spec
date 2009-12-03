@@ -30,11 +30,15 @@ BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.6.3
 BuildRequires:	eigen-devel >= 2.0.51
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
+%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	phonon-devel >= 4.3.1
+BuildRequires:	pkgconfig
+BuildRequires:	python
+BuildRequires:	python-modules
+BuildRequires:	qimageblitz-devel
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
