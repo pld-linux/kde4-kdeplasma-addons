@@ -42,6 +42,7 @@ BuildRequires:	qimageblitz-devel
 BuildRequires:	qt4-build >= %{_qtver}
 BuildRequires:	qt4-qmake >= %{_qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
+BuildRequires:	soprano-devel
 BuildRequires:	strigi-devel >= 0.6.5
 BuildRequires:	xorg-lib-libXcomposite
 BuildRequires:	xorg-lib-libXdamage
