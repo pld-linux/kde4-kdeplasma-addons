@@ -13,13 +13,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.73
+Version:	4.3.80
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
-#Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}%{snap}.tar.bz2
-# Source0-md5:	89d3c3abf8a246caac25955983b1f419
+Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
+# Source0-md5:	c33ed42e020c14ce23156bfaf5312f81
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -88,8 +87,7 @@ Pakiet ten zawiera pliki nagłówkowe potrzebne do budowy aplikacji
 opartych na plazmoidach dla KDE4.
 
 %prep
-%setup -q -n %{orgname}-%{version}%{snap}
-#%setup -q -n %{orgname}-%{version}
+%setup -q -n %{orgname}-%{version}
 #%patch100 -p0
 %patch0 -p1
 
@@ -144,12 +142,12 @@ rm -rf $RPM_BUILD_ROOT
 %endif
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
-#%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
 #%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
 #%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
 %attr(755,root,root) %{_libdir}/liblancelot.so
-%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
-%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
+#%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
+#%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
