@@ -7,7 +7,7 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    unstable
-%define		_qtver	    4.6.0
+%define		qtver	    4.6.0
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
@@ -23,12 +23,12 @@ Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
-BuildRequires:	QtCore-devel >= %{_qtver}
-BuildRequires:	QtNetwork-devel >= %{_qtver}
-BuildRequires:	QtOpenGL-devel >= %{_qtver}
-BuildRequires:	QtScript-devel >= %{_qtver}
-BuildRequires:	QtSvg-devel >= %{_qtver}
-BuildRequires:	QtWebKit-devel >= %{_qtver}
+BuildRequires:	QtCore-devel >= %{qtver}
+BuildRequires:	QtNetwork-devel >= %{qtver}
+BuildRequires:	QtOpenGL-devel >= %{qtver}
+BuildRequires:	QtScript-devel >= %{qtver}
+BuildRequires:	QtSvg-devel >= %{qtver}
+BuildRequires:	QtWebKit-devel >= %{qtver}
 BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen-devel >= 2.0.51
@@ -38,8 +38,8 @@ BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
 BuildRequires:	phonon-devel >= 4.3.80
-BuildRequires:	qt4-build >= %{_qtver}
-BuildRequires:	qt4-qmake >= %{_qtver}
+BuildRequires:	qt4-build >= %{qtver}
+BuildRequires:	qt4-qmake >= %{qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
 BuildRequires:	shared-desktop-ontologies-devel >= 0.2
 BuildRequires:	strigi-devel >= 0.7.0
