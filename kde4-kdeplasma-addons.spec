@@ -7,7 +7,7 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    unstable
-%define		qtver	    4.6.0
+%define		qtver	    4.6.1
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
