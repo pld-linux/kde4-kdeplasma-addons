@@ -38,10 +38,14 @@ BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
 BuildRequires:	phonon-devel >= 4.3.80
+BuildRequires:	pkgconfig
+BuildRequires:	python
+BuildRequires:	qimageblitz-devel
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
 BuildRequires:	shared-desktop-ontologies-devel >= 0.2
+BuildRequires:	soprano-devel
 BuildRequires:	strigi-devel >= 0.7.0
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
