@@ -1,52 +1,51 @@
+# TODO:
+# Lancelot: installed - cmake unimplemented because not found
+#   * XRender - Lancelot compositing support
+#   * Eigen2 - Eigen2 enables the Mandelbrot wallpaper plugin.
 
 %bcond_without	marble	# don't build marble plasma support
 
-%define		orgname	kdeplasma-addons
-%define		_state	stable
-%define		_qtver	4.5.3
+%define		orgname	    kdeplasma-addons
+%define		_state	    stable
+%define		qtver	    4.6.1
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.3.5
+Version:	4.4.0
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	cc1dbdc54760f3e7ded6ca6a717ee6da
-#Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
+# Source0-md5:	0a990a833a8a7c5434d158b0b18c5ad2
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
-BuildRequires:	QtCore-devel >= %{_qtver}
-BuildRequires:	QtNetwork-devel >= %{_qtver}
-BuildRequires:	QtOpenGL-devel >= %{_qtver}
-BuildRequires:	QtScript-devel >= %{_qtver}
-BuildRequires:	QtSvg-devel >= %{_qtver}
-BuildRequires:	QtWebKit-devel >= %{_qtver}
+BuildRequires:	QtCore-devel >= %{qtver}
+BuildRequires:	QtNetwork-devel >= %{qtver}
+BuildRequires:	QtOpenGL-devel >= %{qtver}
+BuildRequires:	QtScript-devel >= %{qtver}
+BuildRequires:	QtSvg-devel >= %{qtver}
+BuildRequires:	QtWebKit-devel >= %{qtver}
 BuildRequires:	automoc4 >= 0.9.88
-BuildRequires:	cmake >= 2.6.3
+BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen-devel >= 2.0.51
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 %{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
 BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-BuildRequires:	phonon-devel >= 4.3.1
-BuildRequires:	pkgconfig
-BuildRequires:	python
-BuildRequires:	python-modules
-BuildRequires:	qimageblitz-devel
-BuildRequires:	qt4-build >= %{_qtver}
-BuildRequires:	qt4-qmake >= %{_qtver}
+BuildRequires:	phonon-devel >= 4.3.80
+BuildRequires:	qt4-build >= %{qtver}
+BuildRequires:	qt4-qmake >= %{qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
-BuildRequires:	soprano-devel
-BuildRequires:	strigi-devel >= 0.6.5
-BuildRequires:	xorg-lib-libXcomposite
-BuildRequires:	xorg-lib-libXdamage
-BuildRequires:	xorg-lib-libXrender
+BuildRequires:	shared-desktop-ontologies-devel >= 0.2
+BuildRequires:	strigi-devel >= 0.7.0
+BuildRequires:	xorg-lib-libXcomposite-devel
+BuildRequires:	xorg-lib-libXdamage-devel
+BuildRequires:	xorg-lib-libXrender-devel
 BuildRequires:	xorg-lib-libXtst-devel
 Obsoletes:	kde4-kdeplasmoids
 BuildRoot:	%{tmpdir}/%{name}-%{version}-root-%(id -u -n)
@@ -144,11 +143,11 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
-%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
-%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
+#%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
+#%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
 %attr(755,root,root) %{_libdir}/liblancelot.so
-%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
-%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
+#%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
+#%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
@@ -172,6 +171,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 %{_datadir}/config/comic.knsrc
+%{_datadir}/config/plasmaweather.knsrc
 %{_datadir}/config/virus_wallpaper.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
@@ -181,8 +181,11 @@ rm -rf $RPM_BUILD_ROOT
 %dir %{_datadir}/apps/desktoptheme/default/bubblemon
 %{_datadir}/apps/desktoptheme/default/bubblemon/bubble.svg
 %dir %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
-%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/greensquare.svgz
+%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/blanksquare.svg
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+%{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
+%{_iconsdir}/hicolor/scalable/apps/bball.svgz
+%{_iconsdir}/oxygen/*x*/apps/qalculate-applet.png
 
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
@@ -190,11 +193,14 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/ServiceMenus/preview.desktop
 %dir %{_datadir}/apps/bball
 %{_datadir}/apps/bball/bball.svgz
+%{_iconsdir}/*/*x*/apps/bball.png
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
 #%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma
 %{_datadir}/apps/plasma-applet-opendesktop
+%{_datadir}/apps/plasma-applet-opendesktop-activities
+%{_datadir}/apps/plasma-applet-frame
 %{_datadir}/apps/plasma_pastebin
 %{_datadir}/apps/plasma_wallpaper_pattern
 
@@ -204,6 +210,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
+%{_datadir}/apps/desktoptheme/oxygen/lancelot
 #%{_datadir}/apps/desktoptheme/air/
 
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
@@ -215,6 +222,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
-%{_includedir}/conversion
+#%{_includedir}/conversion
 %{_includedir}/lancelot
-%{_datadir}/apps/cmake/modules/*.cmake
+#%{_datadir}/apps/cmake/modules/*.cmake
