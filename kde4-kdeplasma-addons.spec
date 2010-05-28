@@ -6,19 +6,19 @@
 %bcond_without	marble	# don't build marble plasma support
 
 %define		orgname	    kdeplasma-addons
-%define		_state	    stable
+%define		_state	    unstable
 %define		qtver	    4.6.2
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.4.3
+Version:	4.4.80
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	e347d1ca1f1e3100e838287365de43e4
-Patch100:	%{name}-branch.diff
+# Source0-md5:	2dd6a5d04e1a6b4abe6e4a812c25c2c9
+#Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -37,15 +37,15 @@ BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-BuildRequires:	phonon-devel >= 4.3.80
+BuildRequires:	phonon-devel >= 4.4.1
 BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	qimageblitz-devel
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
 BuildRequires:	rpmbuild(macros) >= 1.293
-BuildRequires:	shared-desktop-ontologies-devel >= 0.2
-BuildRequires:	soprano-devel
+BuildRequires:	shared-desktop-ontologies-devel >= 0.5
+BuildRequires:	soprano-devel >= 2.4.63
 BuildRequires:	strigi-devel >= 0.7.0
 BuildRequires:	xorg-lib-libXcomposite-devel
 BuildRequires:	xorg-lib-libXdamage-devel
@@ -93,7 +93,7 @@ opartych na plazmoidach dla KDE4.
 %prep
 %setup -q -n %{orgname}-%{version}
 #%patch100 -p0
-%patch0 -p1
+#%patch0 -p1
 
 %build
 install -d build
@@ -141,6 +141,8 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_oseiprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_runner_datetime.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
 %if %{with marble}
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_marble.so
 %endif
@@ -171,6 +173,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/widgets/*
 %{_datadir}/apps/desktoptheme/heron
 %{_datadir}/apps/desktoptheme/slim-glow
+%{_datadir}/apps/plasmaboard
 %{_datadir}/kde4/services/*.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
@@ -190,6 +193,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
 %{_iconsdir}/oxygen/*x*/apps/qalculate-applet.png
+%{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
 
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
@@ -213,19 +217,22 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/lancelot
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
+%attr(755,root,root) %ghost %{_libdir}/liblancelot-datamodels.so.?
+%attr(755,root,root) %{_libdir}/liblancelot-datamodels.so.*.*.*
 %{_datadir}/apps/desktoptheme/default/lancelot
 %{_datadir}/apps/desktoptheme/oxygen/lancelot
-#%{_datadir}/apps/desktoptheme/air/
 
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
 %{_datadir}/apps/lancelot
 %{_iconsdir}/hicolor/*x*/apps/lancelot.png
-%{_iconsdir}/hicolor/*x*/apps/lancelot-part.png
+%{_iconsdir}/hicolor/*x*/apps/lancelot-start.png
 
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
 #%{_includedir}/conversion
+%{_includedir}/KDE/Lancelot
 %{_includedir}/lancelot
-#%{_datadir}/apps/cmake/modules/*.cmake
+%{_includedir}/lancelot-datamodels
+%{_datadir}/apps/cmake/modules/*.cmake
