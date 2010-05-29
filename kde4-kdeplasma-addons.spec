@@ -189,7 +189,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
-%{_iconsdir}/oxygen/*x*/apps/qalculate-applet.png
+%{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
