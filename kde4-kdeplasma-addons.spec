@@ -7,17 +7,17 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    stable
-%define		qtver	    4.6.2
+%define		qtver	    4.6.3
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.4.4
+Version:	4.4.5
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	143a792dbbbef01ae94e652239b1fe57
+# Source0-md5:	cdc027b3dfdcc588f253006baa970638
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
