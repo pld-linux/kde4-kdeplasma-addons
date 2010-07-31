@@ -22,13 +22,13 @@ diff -ur kdeplasma-addons-4.3.90/applets/pastebin/pastebin.cpp kdeplasma-addons-
 diff -ur kdeplasma-addons-4.3.90/applets/pastebin/pastebin.h kdeplasma-addons-4.3.90.new/applets/pastebin/pastebin.h
 --- kdeplasma-addons-4.3.90/applets/pastebin/pastebin.h	2009-12-05 00:09:42.000000000 +0100
 +++ kdeplasma-addons-4.3.90.new/applets/pastebin/pastebin.h	2010-01-13 13:28:15.798996766 +0100
-@@ -70,7 +70,7 @@
+@@ -80,7 +80,7 @@
          Sending = 8      /* Sending data to the server, waiting for reply */
      };
  
 -    enum textServers { PASTEBINCA, PASTEBINCOM };
 +    enum textServers { PASTEBINCOM, PASTEBINCA };
-     enum imageServers { IMAGEBINCA, IMAGESHACK, SIMPLESTIMAGEHOSTING };
+     enum imageServers { IMAGEBINCA, IMAGESHACK, SIMPLESTIMAGEHOSTING, IMGUR };
  
  public slots:
 diff -ur kdeplasma-addons-4.3.90/dataengines/pastebin/backends/pastebincom.h kdeplasma-addons-4.3.90.new/dataengines/pastebin/backends/pastebincom.h
@@ -46,12 +46,13 @@ diff -ur kdeplasma-addons-4.3.90/dataengines/pastebin/backends/pastebincom.h kde
 diff -ur kdeplasma-addons-4.3.90/dataengines/pastebin/pastebinservice.h kdeplasma-addons-4.3.90.new/dataengines/pastebin/pastebinservice.h
 --- kdeplasma-addons-4.3.90/dataengines/pastebin/pastebinservice.h	2009-10-15 18:34:11.000000000 +0200
 +++ kdeplasma-addons-4.3.90.new/dataengines/pastebin/pastebinservice.h	2010-01-13 13:28:35.522328387 +0100
-@@ -38,7 +38,7 @@
+@@ -34,7 +34,7 @@
      Q_OBJECT
  
  public:
 -    enum textServers { PASTEBINCA, PASTEBINCOM };
 +    enum textServers { PASTEBINCOM, PASTEBINCA };
-     enum imageServers { IMAGEBINCA, IMAGESHACK, SIMPLESTIMAGEHOSTING };
+     enum imageServers { IMAGEBINCA, IMAGESHACK, SIMPLESTIMAGEHOSTING, IMGUR };
  
      PastebinService(PastebinEngine *engine);
+
