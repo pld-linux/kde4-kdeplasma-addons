@@ -13,7 +13,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.5.0
-Release:	3
+Release:	4
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
@@ -128,7 +128,51 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/kde4/krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/kcm_krunner_*.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_*.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_bball.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_binaryclock.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_blackboard.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_bookmarks.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_bubblemon.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_calculator.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_charselect.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_comic.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_dict.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_eyes.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_fifteenPuzzle.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_fileWatcher.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_frame.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_fuzzy_clock.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_incomingmsg.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_konqprofiles.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_konsoleprofiles.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_leavenote.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_life.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_luna.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_magnifique.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_mediaplayer.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_microblog.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_news.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_notes.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_nowplaying.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_opendesktop.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_opendesktop_activities.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_paste.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_pastebin.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_plasmaboard.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_previewer.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_qalculate.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_rssnow.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_rtm.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_showdashboard.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_showdesktop.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_spellcheck.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_timer.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_unitconverter.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_weather.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_weatherstation.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_webslice.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_comic_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_engine_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_packagestructure_comic.so
@@ -148,13 +192,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
-#%attr(755,root,root) %ghost %{_libdir}/libconversion.so.?
-#%attr(755,root,root) %{_libdir}/libconversion.so.*.*.*
-%attr(755,root,root) %{_libdir}/liblancelot.so
-%attr(755,root,root) %{_libdir}/liblancelot-datamodels.so.?
-%attr(755,root,root) %{_libdir}/liblancelot-datamodels.so.*.*.*
-#%attr(755,root,root) %ghost %{_libdir}/libocsclient.so.?
-#%attr(755,root,root) %{_libdir}/libocsclient.so.*.*.*
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
@@ -174,7 +211,87 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/widgets/*
 %{_datadir}/apps/desktoptheme/heron
 %{_datadir}/apps/desktoptheme/slim-glow
-%{_datadir}/kde4/services/*.desktop
+%{_datadir}/kde4/services/CharRunner_config.desktop
+%{_datadir}/kde4/services/CharacterRunner.desktop
+%{_datadir}/kde4/services/apodprovider.desktop
+%{_datadir}/kde4/services/browserhistory.desktop
+%{_datadir}/kde4/services/epodprovider.desktop
+%{_datadir}/kde4/services/flickrprovider.desktop
+%{_datadir}/kde4/services/katesessions.desktop
+%{_datadir}/kde4/services/konquerorsessions.desktop
+%{_datadir}/kde4/services/konsolesessions.desktop
+%{_datadir}/kde4/services/oseiprovider.desktop
+%{_datadir}/kde4/services/plasma-applet-bball.desktop
+%{_datadir}/kde4/services/plasma-applet-binaryclock.desktop
+%{_datadir}/kde4/services/plasma-applet-blackboard.desktop
+%{_datadir}/kde4/services/plasma-applet-bookmarks.desktop
+%{_datadir}/kde4/services/plasma-applet-bubblemon.desktop
+%{_datadir}/kde4/services/plasma-applet-calculator.desktop
+%{_datadir}/kde4/services/plasma-applet-charselect.desktop
+%{_datadir}/kde4/services/plasma-applet-eyes.desktop
+%{_datadir}/kde4/services/plasma-applet-fifteenPuzzle.desktop
+%{_datadir}/kde4/services/plasma-applet-incomingmsg.desktop
+%{_datadir}/kde4/services/plasma-applet-knowledgebase.desktop
+%{_datadir}/kde4/services/plasma-applet-konqprofiles.desktop
+%{_datadir}/kde4/services/plasma-applet-konsoleprofiles.desktop
+%{_datadir}/kde4/services/plasma-applet-leavenote.desktop
+%{_datadir}/kde4/services/plasma-applet-life.desktop
+%{_datadir}/kde4/services/plasma-applet-luna.desktop
+%{_datadir}/kde4/services/plasma-applet-magnifique.desktop
+%{_datadir}/kde4/services/plasma-applet-mediaplayer.desktop
+%{_datadir}/kde4/services/plasma-applet-microblog.desktop
+%{_datadir}/kde4/services/plasma-applet-news.desktop
+%{_datadir}/kde4/services/plasma-applet-nowplaying.desktop
+%{_datadir}/kde4/services/plasma-applet-opendesktop-activities.desktop
+%{_datadir}/kde4/services/plasma-applet-opendesktop.desktop
+%{_datadir}/kde4/services/plasma-applet-paste.desktop
+%{_datadir}/kde4/services/plasma-applet-pastebin.desktop
+%{_datadir}/kde4/services/plasma-applet-previewer.desktop
+%{_datadir}/kde4/services/plasma-applet-qalculate.desktop
+%{_datadir}/kde4/services/plasma-applet-rememberthemilk.desktop
+%{_datadir}/kde4/services/plasma-applet-rssnow.desktop
+%{_datadir}/kde4/services/plasma-applet-showdashboard.desktop
+%{_datadir}/kde4/services/plasma-applet-showdesktop.desktop
+%{_datadir}/kde4/services/plasma-applet-spellcheck.desktop
+%{_datadir}/kde4/services/plasma-applet-systemloadviewer.desktop
+%{_datadir}/kde4/services/plasma-applet-timer.desktop
+%{_datadir}/kde4/services/plasma-applet-unitconverter.desktop
+%{_datadir}/kde4/services/plasma-applet-weather.desktop
+%{_datadir}/kde4/services/plasma-applet-weatherstation.desktop
+%{_datadir}/kde4/services/plasma-applet-webslice.desktop
+%{_datadir}/kde4/services/plasma-clock-fuzzy.desktop
+%{_datadir}/kde4/services/plasma-comic-default.desktop
+%{_datadir}/kde4/services/plasma-dataengine-comic.desktop
+%{_datadir}/kde4/services/plasma-dataengine-microblog.desktop
+%{_datadir}/kde4/services/plasma-dataengine-ocs.desktop
+%{_datadir}/kde4/services/plasma-dataengine-potd.desktop
+%{_datadir}/kde4/services/plasma-dict-default.desktop
+%{_datadir}/kde4/services/plasma-engine-kdeobservatory.desktop
+%{_datadir}/kde4/services/plasma-engine-pastebin.desktop
+%{_datadir}/kde4/services/plasma-engine-rtm.desktop
+%{_datadir}/kde4/services/plasma-fileWatcher-default.desktop
+%{_datadir}/kde4/services/plasma-frame-default.desktop
+%{_datadir}/kde4/services/plasma-kolourpicker-default.desktop
+%{_datadir}/kde4/services/plasma-notes-default.desktop
+%{_datadir}/kde4/services/plasma-packagestructure-comic.desktop
+%{_datadir}/kde4/services/plasma-runner-audioplayercontrol.desktop
+%{_datadir}/kde4/services/plasma-runner-audioplayercontrol_config.desktop
+%{_datadir}/kde4/services/plasma-runner-contacts.desktop
+%{_datadir}/kde4/services/plasma-runner-converter.desktop
+%{_datadir}/kde4/services/plasma-runner-datetime.desktop
+%{_datadir}/kde4/services/plasma-runner-kopete.desktop
+%{_datadir}/kde4/services/plasma-runner-spellchecker.desktop
+%{_datadir}/kde4/services/plasma-runner-spellchecker_config.desktop
+%{_datadir}/kde4/services/plasma-runner-techbase.desktop
+%{_datadir}/kde4/services/plasma-runner-wikipedia.desktop
+%{_datadir}/kde4/services/plasma-runner-wikitravel.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-mandelbrot.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-marble.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-pattern.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-virus.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-weather.desktop
+%{_datadir}/kde4/services/plasma_applet_plasmaboard.desktop
+%{_datadir}/kde4/services/wcpotdprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 %{_datadir}/config/comic.knsrc
@@ -204,7 +321,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/*/*x*/apps/bball.png
 %{_datadir}/apps/bball/bounce.ogg
 %{_datadir}/apps/bball/football.svgz
-#%{_datadir}/apps/plasma-bluemarble
 %{_datadir}/apps/plasma
 %{_datadir}/apps/plasmaboard
 %{_datadir}/apps/plasma-applet-opendesktop
@@ -218,10 +334,15 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_bindir}/lancelot
 %attr(755,root,root) %ghost %{_libdir}/liblancelot.so.?
 %attr(755,root,root) %{_libdir}/liblancelot.so.*.*.*
+%attr(755,root,root) %{_libdir}/liblancelot.so
+%attr(755,root,root) %{_libdir}/liblancelot-datamodels.so.?
+%attr(755,root,root) %{_libdir}/liblancelot-datamodels.so.*.*.*
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_lancelot_launcher.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_lancelot_part.so
 %{_datadir}/apps/desktoptheme/default/lancelot
 %{_datadir}/apps/desktoptheme/oxygen/lancelot
-#%{_datadir}/apps/desktoptheme/air/
-
+%{_datadir}/kde4/services/plasma-applet-lancelot-launcher.desktop
+%{_datadir}/kde4/services/plasma-applet-lancelot-part.desktop
 %{_datadir}/dbus-1/services/org.kde.lancelot.service
 %{_datadir}/mime/packages/lancelotpart-mime.xml
 %{_datadir}/apps/lancelot
@@ -231,6 +352,6 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
-#%{_includedir}/conversion
+%{_includedir}/KDE/Lancelot
+%{_includedir}/lancelot-datamodels
 %{_includedir}/lancelot
-#%{_datadir}/apps/cmake/modules/*.cmake
