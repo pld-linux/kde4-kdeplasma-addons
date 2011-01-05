@@ -7,17 +7,17 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    stable
-%define		qtver	    4.7.0
+%define		qtver	    4.7.1
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.5.4
-Release:	2
+Version:	4.5.5
+Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	f1909948a12601a13067ff2658d8daea
+# Source0-md5:	1ad0fbe68940a3f2c38c071cc5a58e95
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -44,7 +44,7 @@ BuildRequires:	qca-devel >= 2.0.2
 BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
-BuildRequires:	rpmbuild(macros) >= 1.293
+BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	shared-desktop-ontologies-devel >= 0.5
 BuildRequires:	soprano-devel >= 2.4.64
 BuildRequires:	strigi-devel >= 0.7.2
@@ -100,12 +100,6 @@ opartych na plazmoidach dla KDE4.
 install -d build
 cd build
 %cmake \
-	-DCMAKE_INSTALL_PREFIX=%{_prefix} \
-	-DLIB_INSTALL_DIR=%{_libdir} \
-	-DCMAKE_BUILD_TYPE=%{!?debug:Release}%{?debug:Debug} \
-%if "%{_lib}" != "lib"
-	-DLIB_SUFFIX=64 \
-%endif
 	../
 
 %{__make}
@@ -144,6 +138,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_frame.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_fuzzy_clock.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_incomingmsg.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_konqprofiles.so
@@ -232,6 +227,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-eyes.desktop
 %{_datadir}/kde4/services/plasma-applet-fifteenPuzzle.desktop
 %{_datadir}/kde4/services/plasma-applet-incomingmsg.desktop
+%{_datadir}/kde4/services/plasma-applet-kdeobservatory.desktop
 %{_datadir}/kde4/services/plasma-applet-knowledgebase.desktop
 %{_datadir}/kde4/services/plasma-applet-konqprofiles.desktop
 %{_datadir}/kde4/services/plasma-applet-konsoleprofiles.desktop
