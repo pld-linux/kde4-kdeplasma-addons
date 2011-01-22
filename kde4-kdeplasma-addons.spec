@@ -311,6 +311,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
 %{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 %{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
+%{_iconsdir}/hicolor/*x*/apps/eyes.png
+%{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
+%{_iconsdir}/hicolor/*x*/apps/lifegame.png
+%{_iconsdir}/hicolor/*x*/apps/luna.png
 %{_datadir}/config/pastebin.knsrc
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
