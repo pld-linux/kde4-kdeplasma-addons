@@ -7,17 +7,17 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    stable
-%define		qtver	    4.7.1
+%define		qtver	    4.7.2
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.6.0
+Version:	4.6.2
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	c7307dfa69c986fb8114505bc38e6af2
+# Source0-md5:	98f6e080bf0cee39856408de9e531205
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -117,6 +117,7 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
+%attr(755,root,root) %{_bindir}/kimpanel
 %attr(755,root,root) %{_libdir}/kde4/krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/kcm_krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_bball.so
@@ -135,6 +136,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_fuzzy_clock.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_incomingmsg.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kimpanel.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_konqprofiles.so
@@ -189,6 +191,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
+%attr(755,root,root) %{_libdir}/libkimpanelruntime.so.?
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
@@ -198,6 +201,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librtm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libplasma_groupingcontainment.so.?
 %attr(755,root,root) %{_libdir}/libplasma_groupingcontainment.so.*.*.*
+%attr(755,root,root) %{_libdir}/scim-*/scim-panel-dbus
+%{_datadir}/config.kcfg/kimpanelconfig.kcfg
+%{_datadir}/dbus-1/interfaces/org.kde.impanel.xml
 %{_datadir}/apps/desktoptheme/Aya
 #%{_datadir}/apps/desktoptheme/Elegance
 #%{_datadir}/apps/desktoptheme/Silicon
@@ -231,6 +237,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-fifteenPuzzle.desktop
 %{_datadir}/kde4/services/plasma-applet-incomingmsg.desktop
 %{_datadir}/kde4/services/plasma-applet-kdeobservatory.desktop
+%{_datadir}/kde4/services/plasma-applet-kimpanel.desktop
 %{_datadir}/kde4/services/plasma-applet-knowledgebase.desktop
 %{_datadir}/kde4/services/plasma-applet-konqprofiles.desktop
 %{_datadir}/kde4/services/plasma-applet-konsoleprofiles.desktop
