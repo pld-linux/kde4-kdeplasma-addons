@@ -12,12 +12,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.6.2
+Version:	4.6.3
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	98f6e080bf0cee39856408de9e531205
+# Source0-md5:	f3033dc62fcc1988dec6a38796cb929d
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -39,6 +39,7 @@ BuildRequires:	qca-devel >= 2.0.2
 BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
+BuildRequires:	qwt-devel
 BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	scim-devel
 BuildRequires:	shared-desktop-ontologies-devel >= 0.5
