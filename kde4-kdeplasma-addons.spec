@@ -12,12 +12,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.6.5
-Release:	1
+Version:	4.7.0
+Release:	0.1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	aa6cc294c723c874710a1118793f4724
+# Source0-md5:	f7152ffd214d96b01fab0b112ce4def6
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -28,14 +28,16 @@ BuildRequires:	automoc4 >= 0.9.88
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen >= 1:2.0.12-3
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
-%{?with_marble:BuildRequires:	kde4-kdeedu-devel >= %{version}}
-BuildRequires:	kde4-kdegraphics-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
+%{?with_marble:BuildRequires:	libkdeedu-devel >= %{version}}
+BuildRequires:	libkexiv2-devel >= %{version}
+BuildRequires:	marble-devel >= 4.7.0
 BuildRequires:	phonon-devel >= 4.4.1
 BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	qca-devel >= 2.0.2
+BuildRequires:	qimageblitz-devel
 BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
