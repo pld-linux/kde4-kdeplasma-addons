@@ -13,7 +13,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.7.0
-Release:	0.1
+Release:	0.2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
@@ -30,7 +30,7 @@ BuildRequires:	eigen >= 1:2.0.12-3
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-%{?with_marble:BuildRequires:	libkdeedu-devel >= %{version}}
+%{?with_marble:BuildRequires:	marble-devel >= %{version}}
 BuildRequires:	libkexiv2-devel >= %{version}
 BuildRequires:	marble-devel >= 4.7.0
 BuildRequires:	phonon-devel >= 4.4.1
@@ -208,8 +208,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/config.kcfg/kimpanelconfig.kcfg
 %{_datadir}/dbus-1/interfaces/org.kde.impanel.xml
 %{_datadir}/apps/desktoptheme/Aya
+%{_datadir}/apps/desktoptheme/Androbit
 #%{_datadir}/apps/desktoptheme/Elegance
+%{_datadir}/apps/desktoptheme/Produkt
 #%{_datadir}/apps/desktoptheme/Silicon
+%{_datadir}/apps/desktoptheme/Tibanna
 %dir %{_datadir}/apps/desktoptheme/default/stylesheets
 %{_datadir}/apps/desktoptheme/default/stylesheets/*
 %dir %{_datadir}/apps/desktoptheme/default/weatherstation
