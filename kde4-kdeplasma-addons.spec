@@ -13,7 +13,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.7.2
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
@@ -78,7 +78,6 @@ Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek plazmoidów dla KDE4
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
 Requires:	kde4-kdebase-workspace-devel >= %{version}
-Requires:	kde4-kdegraphics-devel >= %{version}
 Requires:	kde4-kdelibs-devel >= %{version}
 Requires:	kde4-kdepimlibs-devel >= %{version}
 
