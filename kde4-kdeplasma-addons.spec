@@ -7,17 +7,17 @@
 
 %define		orgname	    kdeplasma-addons
 %define		_state	    stable
-%define		qtver	    4.7.4
+%define		qtver	    4.8.0
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.7.4
-Release:	2
+Version:	4.8.0
+Release:	0.1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
-# Source0-md5:	57b6c3ee0bed9c0c2190308a4e690e39
+# Source0-md5:	5b2947ef92fc04aecca8af4393336265
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -119,7 +119,6 @@ rm -rf $RPM_BUILD_ROOT
 
 %files
 %defattr(644,root,root,755)
-%attr(755,root,root) %{_bindir}/kimpanel
 %attr(755,root,root) %{_libdir}/kde4/krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/kcm_krunner_*.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_bball.so
@@ -138,7 +137,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_fuzzy_clock.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_incomingmsg.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kimpanel.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_konqprofiles.so
@@ -183,6 +181,9 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_runner_datetime.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
 %attr(755,root,root) %{_libdir}/kde4/kcm_plasma_runner_events.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_icontasks.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kimpanel.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_potd.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_containment_griddesktop.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_containment_groupingdesktop.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_containment_groupingpanel.so
@@ -193,7 +194,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_pattern.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_virus.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_weather.so
-%attr(755,root,root) %{_libdir}/libkimpanelruntime.so.?
 %attr(755,root,root) %{_libdir}/libplasmacomicprovidercore.so
 %attr(755,root,root) %ghost %{_libdir}/libplasmapotdprovidercore.so.?
 %attr(755,root,root) %{_libdir}/libplasmapotdprovidercore.so.*.*.*
@@ -203,9 +203,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librtm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libplasma_groupingcontainment.so.?
 %attr(755,root,root) %{_libdir}/libplasma_groupingcontainment.so.*.*.*
-%attr(755,root,root) %{_libdir}/scim-*/scim-panel-dbus
-%{_datadir}/config.kcfg/kimpanelconfig.kcfg
-%{_datadir}/dbus-1/interfaces/org.kde.impanel.xml
+%attr(755,root,root) %{_libdir}/kde4/libexec/kimpanel-scim-panel
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Androbit
 #%{_datadir}/apps/desktoptheme/Elegance
@@ -242,7 +240,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-fifteenPuzzle.desktop
 %{_datadir}/kde4/services/plasma-applet-incomingmsg.desktop
 %{_datadir}/kde4/services/plasma-applet-kdeobservatory.desktop
-%{_datadir}/kde4/services/plasma-applet-kimpanel.desktop
 %{_datadir}/kde4/services/plasma-applet-knowledgebase.desktop
 %{_datadir}/kde4/services/plasma-applet-konqprofiles.desktop
 %{_datadir}/kde4/services/plasma-applet-konsoleprofiles.desktop
@@ -311,8 +308,6 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/config/virus_wallpaper.knsrc
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
-%{_datadir}/apps/desktoptheme/default/rssnow/left.svgz
-%{_datadir}/apps/desktoptheme/default/rssnow/right.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/rssnow.svgz
 %dir %{_datadir}/apps/desktoptheme/default/bubblemon
 %{_datadir}/apps/desktoptheme/default/bubblemon/bubble.svg
