@@ -156,7 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_pastebin.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_plasmaboard.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_previewer.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_qalculate.so
+#%attr(755,root,root) %{_libdir}/kde4/plasma_applet_qalculate.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_rssnow.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_rtm.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_showdashboard.so
@@ -256,7 +256,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-paste.desktop
 %{_datadir}/kde4/services/plasma-applet-pastebin.desktop
 %{_datadir}/kde4/services/plasma-applet-previewer.desktop
-%{_datadir}/kde4/services/plasma-applet-qalculate.desktop
+#%{_datadir}/kde4/services/plasma-applet-qalculate.desktop
 %{_datadir}/kde4/services/plasma-applet-rememberthemilk.desktop
 %{_datadir}/kde4/services/plasma-applet-rssnow.desktop
 %{_datadir}/kde4/services/plasma-applet-showdashboard.desktop
@@ -316,7 +316,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
-%{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
+#%{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 %{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
 %{_iconsdir}/hicolor/*x*/apps/eyes.png
 %{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
