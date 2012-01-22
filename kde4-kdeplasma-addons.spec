@@ -13,7 +13,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.8.0
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.bz2
@@ -30,9 +30,9 @@ BuildRequires:	eigen >= 1:2.0.12-3
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
-%{?with_marble:BuildRequires:	marble-devel >= %{version}}
-BuildRequires:	libkexiv2-devel >= %{version}
-BuildRequires:	marble-devel >= 4.7.0
+BuildRequires:	kde4-libkexiv2-devel >= %{version}
+%{?with_marble:BuildRequires:	kde4-marble-devel >= %{version}}
+BuildRequires:	libqalculate-devel
 BuildRequires:	phonon-devel >= 4.4.1
 BuildRequires:	pkgconfig
 BuildRequires:	python
@@ -156,7 +156,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_pastebin.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_plasmaboard.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_previewer.so
-#%attr(755,root,root) %{_libdir}/kde4/plasma_applet_qalculate.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_applet_qalculate.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_rssnow.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_rtm.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_showdashboard.so
@@ -219,6 +219,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/widgets/*
 #%{_datadir}/apps/desktoptheme/heron
 %{_datadir}/apps/desktoptheme/slim-glow
+%{_datadir}/apps/kdeplasma-addons
 %{_datadir}/kde4/services/CharRunner_config.desktop
 %{_datadir}/kde4/services/CharacterRunner.desktop
 %{_datadir}/kde4/services/apodprovider.desktop
@@ -306,6 +307,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/config/comic.knsrc
 %{_datadir}/config/plasmaweather.knsrc
 %{_datadir}/config/virus_wallpaper.knsrc
+%{_datadir}/config.kcfg/kimpanelconfig.kcfg
 %dir %{_datadir}/apps/desktoptheme/default/rssnow
 %{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
 %{_datadir}/apps/desktoptheme/default/rssnow/rssnow.svgz
@@ -316,7 +318,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
-#%{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
+%{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 %{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
 %{_iconsdir}/hicolor/*x*/apps/eyes.png
 %{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
@@ -345,6 +347,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-containment-groupingpanel.desktop
 %{_datadir}/kde4/services/plasma-runner-events.desktop
 %{_datadir}/kde4/services/plasma-runner-events_config.desktop
+%{_datadir}/kde4/services/plasma-applet-icontasks.desktop
+%{_datadir}/kde4/services/plasma-applet-kimpanel.desktop
+%{_datadir}/kde4/services/plasma-applet-qalculate.desktop
+%{_datadir}/kde4/services/plasma-dataengine-kimpanel.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-potd.desktop
 
 %files lancelot
 %defattr(644,root,root,755)
