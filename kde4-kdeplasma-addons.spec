@@ -12,32 +12,36 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.8.1
+Version:	4.8.2
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	9844b096e637f51e4640816cd8b4de42
+# Source0-md5:	baafb502d214c1a4869f5cf2487e7e59
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
 BuildRequires:	QtNetwork-devel >= %{qtver}
+BuildRequires:	attica-devel
 BuildRequires:	automoc4 >= 0.9.88
+BuildRequires:	boost-devel
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen >= 1:2.0.12-3
+BuildRequires:	glibc-misc
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
+BuildRequires:	kde4-kdebase-workspace-kwin >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
 BuildRequires:	kde4-libkexiv2-devel >= %{version}
 %{?with_marble:BuildRequires:	kde4-marble-devel >= %{version}}
+BuildRequires:	libdbusmenu-qt-devel
 BuildRequires:	libqalculate-devel
 BuildRequires:	phonon-devel >= 4.4.1
 BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	qca-devel >= 2.0.2
-BuildRequires:	qimageblitz-devel
 BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
@@ -45,6 +49,7 @@ BuildRequires:	qwt-devel
 BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	scim-devel
 BuildRequires:	shared-desktop-ontologies-devel >= 0.5
+BuildRequires:	shared-mime-info
 BuildRequires:	soprano-devel >= 2.4.64
 BuildRequires:	strigi-devel >= 0.7.2
 BuildRequires:	xorg-lib-libXcomposite-devel
@@ -305,26 +310,26 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/servicetypes/plasma_comicprovider.desktop
 %{_datadir}/kde4/servicetypes/plasma_potdprovider.desktop
 %{_datadir}/config/comic.knsrc
+%{_datadir}/config/pastebin.knsrc
 %{_datadir}/config/plasmaweather.knsrc
 %{_datadir}/config/virus_wallpaper.knsrc
 %{_datadir}/config.kcfg/kimpanelconfig.kcfg
-%dir %{_datadir}/apps/desktoptheme/default/rssnow
-%{_datadir}/apps/desktoptheme/default/rssnow/background.svgz
-%{_datadir}/apps/desktoptheme/default/rssnow/rssnow.svgz
-%dir %{_datadir}/apps/desktoptheme/default/bubblemon
-%{_datadir}/apps/desktoptheme/default/bubblemon/bubble.svg
-%dir %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
-%{_datadir}/apps/desktoptheme/default/fifteenPuzzle/blanksquare.svg
-%{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+%{_datadir}/apps/desktoptheme/default/bubblemon
+%{_datadir}/apps/desktoptheme/default/fifteenPuzzle
+%{_datadir}/apps/desktoptheme/default/icontasks
+%{_datadir}/apps/desktoptheme/default/rssnow
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
+%{_iconsdir}/hicolor/scalable/apps/eyes.svgz
+%{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
+%{_iconsdir}/hicolor/scalable/apps/kdeobservatory.svgz
+%{_iconsdir}/hicolor/scalable/apps/lifegame.svgz
 %{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 %{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
 %{_iconsdir}/hicolor/*x*/apps/eyes.png
 %{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
 %{_iconsdir}/hicolor/*x*/apps/lifegame.png
 %{_iconsdir}/hicolor/*x*/apps/luna.png
-%{_datadir}/config/pastebin.knsrc
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
 %{_iconsdir}/*/*x*/apps/previewer.png
