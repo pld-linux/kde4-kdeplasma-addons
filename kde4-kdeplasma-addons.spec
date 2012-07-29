@@ -12,12 +12,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.8.4
+Version:	4.9.0
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	3b290c368e8000c2c6d40a8cc2244480
+# Source0-md5:	0aabcacb0036fa99389eaba950bc3dce
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
 URL:		http://www.kde.org/
@@ -144,8 +144,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_konqprofiles.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_konsoleprofiles.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_leavenote.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_life.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_luna.so
@@ -154,7 +152,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_microblog.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_news.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_notes.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_nowplaying.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_opendesktop.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_opendesktop_activities.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_paste.so
@@ -277,9 +274,11 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-clock-fuzzy.desktop
 %{_datadir}/kde4/services/plasma-comic-default.desktop
 %{_datadir}/kde4/services/plasma-dataengine-comic.desktop
-%{_datadir}/kde4/services/plasma-dataengine-microblog.desktop
 %{_datadir}/kde4/services/plasma-dataengine-ocs.desktop
 %{_datadir}/kde4/services/plasma-dataengine-potd.desktop
+%{_datadir}/kde4/services/plasma-dataengine-konqprofiles.desktop
+%{_datadir}/kde4/services/plasma-dataengine-konsoleprofiles.desktop
+%{_datadir}/kde4/services/plasma-runner-youtube.desktop
 %{_datadir}/kde4/services/plasma-dict-default.desktop
 %{_datadir}/kde4/services/plasma-engine-kdeobservatory.desktop
 #%{_datadir}/kde4/services/plasma-engine-pastebin.desktop
@@ -330,6 +329,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
 %{_iconsdir}/hicolor/*x*/apps/lifegame.png
 %{_iconsdir}/hicolor/*x*/apps/luna.png
+%{_iconsdir}/hicolor/*x*/actions/youtube.png
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
 %{_iconsdir}/*/*x*/apps/previewer.png
