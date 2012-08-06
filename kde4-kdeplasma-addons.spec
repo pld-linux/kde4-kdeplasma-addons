@@ -13,7 +13,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.9.0
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
@@ -43,6 +43,7 @@ BuildRequires:	pkgconfig
 BuildRequires:	python
 BuildRequires:	qca-devel >= 2.0.2
 BuildRequires:	qimageblitz-devel >= 0.0.6
+BuildRequires:	qjson-devel
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
 BuildRequires:	qwt-devel
@@ -300,7 +301,9 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-runner-wikipedia.desktop
 %{_datadir}/kde4/services/plasma-runner-wikitravel.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-mandelbrot.desktop
+%if %{with marble}
 %{_datadir}/kde4/services/plasma-wallpaper-marble.desktop
+%endif
 %{_datadir}/kde4/services/plasma-wallpaper-pattern.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-virus.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-weather.desktop
@@ -317,6 +320,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
 %{_datadir}/apps/desktoptheme/default/icontasks
 %{_datadir}/apps/desktoptheme/default/rssnow
+%{_iconsdir}/hicolor/scalable/actions/youtube.svgz
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
 %{_iconsdir}/hicolor/scalable/apps/eyes.svgz
