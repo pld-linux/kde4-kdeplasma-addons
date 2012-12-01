@@ -12,14 +12,15 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.9.1
-Release:	1
+Version:	4.9.3
+Release:	0.1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	fe8e00ba630365cbeec1cb93427e301a
+# Source0-md5:	8ad3a80ffd15ad54c37dd0b984ef9c84
 Patch100:	%{name}-branch.diff
 Patch0:		%{name}-pastebinpld.patch
+Patch1:     webslice_fix_zoom_on_reload.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -99,6 +100,7 @@ opartych na plazmoidach dla KDE4.
 %setup -q -n %{orgname}-%{version}
 #%patch100 -p0
 #%patch0 -p1
+%patch1 -p1
 
 %build
 install -d build
