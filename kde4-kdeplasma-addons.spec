@@ -1,8 +1,4 @@
-# TODO:
-# Lancelot: installed - cmake unimplemented because not found
-#   * XRender - Lancelot compositing support
-#   * Eigen2 - Eigen2 enables the Mandelbrot wallpaper plugin.
-
+#
 %bcond_without	marble	# don't build marble plasma support
 
 %define		orgname	    kdeplasma-addons
@@ -13,14 +9,13 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.9.3
-Release:	0.1
+Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
 # Source0-md5:	8ad3a80ffd15ad54c37dd0b984ef9c84
 Patch100:	%{name}-branch.diff
-Patch0:		%{name}-pastebinpld.patch
-Patch1:     webslice_fix_zoom_on_reload.patch
+Patch0:		webslice_fix_zoom_on_reload.patch
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
 BuildRequires:	OpenGL-devel
@@ -42,6 +37,7 @@ BuildRequires:	libqalculate-devel
 BuildRequires:	phonon-devel >= 4.4.1
 BuildRequires:	pkgconfig
 BuildRequires:	python
+BuildRequires:	qoauth-devel
 BuildRequires:	qca-devel >= 2.0.2
 BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qjson-devel
@@ -99,8 +95,7 @@ opartych na plazmoidach dla KDE4.
 %prep
 %setup -q -n %{orgname}-%{version}
 #%patch100 -p0
-#%patch0 -p1
-%patch1 -p1
+%patch0 -p1
 
 %build
 install -d build
@@ -281,10 +276,10 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-dataengine-potd.desktop
 %{_datadir}/kde4/services/plasma-dataengine-konqprofiles.desktop
 %{_datadir}/kde4/services/plasma-dataengine-konsoleprofiles.desktop
+%{_datadir}/kde4/services/plasma-dataengine-microblog.desktop
 %{_datadir}/kde4/services/plasma-runner-youtube.desktop
 %{_datadir}/kde4/services/plasma-dict-default.desktop
 %{_datadir}/kde4/services/plasma-engine-kdeobservatory.desktop
-#%{_datadir}/kde4/services/plasma-engine-pastebin.desktop
 %{_datadir}/kde4/services/plasma-engine-rtm.desktop
 %{_datadir}/kde4/services/plasma-fileWatcher-default.desktop
 %{_datadir}/kde4/services/plasma-frame-default.desktop
