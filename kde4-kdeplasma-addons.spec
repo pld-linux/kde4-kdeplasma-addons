@@ -8,12 +8,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.9.3
+Version:	4.9.4
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	8ad3a80ffd15ad54c37dd0b984ef9c84
+# Source0-md5:	630c2db7f869591e80e8f5493890ef58
 Patch100:	%{name}-branch.diff
 Patch0:		webslice_fix_zoom_on_reload.patch
 URL:		http://www.kde.org/
