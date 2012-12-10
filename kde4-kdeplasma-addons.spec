@@ -26,6 +26,7 @@ BuildRequires:	boost-devel
 BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen >= 1:2.0.12-3
 BuildRequires:	glibc-misc
+BuildRequires:	ibus-devel
 BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
 BuildRequires:	kde4-kdebase-workspace-kwin >= %{version}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
@@ -203,6 +204,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/librtm.so.*.*.*
 %attr(755,root,root) %ghost %{_libdir}/libplasma_groupingcontainment.so.?
 %attr(755,root,root) %{_libdir}/libplasma_groupingcontainment.so.*.*.*
+%attr(755,root,root) %{_libdir}/kde4/libexec/kimpanel-ibus-panel
 %attr(755,root,root) %{_libdir}/kde4/libexec/kimpanel-scim-panel
 %{_datadir}/apps/desktoptheme/Aya
 %{_datadir}/apps/desktoptheme/Androbit
@@ -382,6 +384,8 @@ rm -rf $RPM_BUILD_ROOT
 %files devel
 %defattr(644,root,root,755)
 %attr(755,root,root) %{_libdir}/*.so
+%exclude %{_libdir}/libplasmacomicprovidercore.so
+%exclude %{_libdir}/liblancelot.so
 %{_includedir}/KDE/Lancelot
 %{_includedir}/lancelot-datamodels
 %{_includedir}/lancelot
