@@ -8,12 +8,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.9.4
+Version:	4.10.0
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	630c2db7f869591e80e8f5493890ef58
+# Source0-md5:	96f8706475ec5a40cedaf25fce7996b1
 Patch100:	%{name}-branch.diff
 Patch0:		webslice_fix_zoom_on_reload.patch
 URL:		http://www.kde.org/
@@ -130,7 +130,6 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_blackboard.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_bookmarks.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_bubblemon.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_calculator.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_charselect.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_comic.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_dict.so
@@ -181,6 +180,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_runner_datetime.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_mandelbrot.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_wallpaper_qml.so
 %attr(755,root,root) %{_libdir}/kde4/kcm_plasma_runner_events.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_icontasks.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kimpanel.so
@@ -293,6 +293,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-runner-contacts.desktop
 %{_datadir}/kde4/services/plasma-runner-converter.desktop
 %{_datadir}/kde4/services/plasma-runner-datetime.desktop
+%{_datadir}/kde4/services/plasma-runner-dictionary.desktop
+%{_datadir}/kde4/services/plasma-runner-dictionary_config.desktop
 %{_datadir}/kde4/services/plasma-runner-kopete.desktop
 %{_datadir}/kde4/services/plasma-runner-spellchecker.desktop
 %{_datadir}/kde4/services/plasma-runner-spellchecker_config.desktop
@@ -304,6 +306,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-wallpaper-marble.desktop
 %endif
 %{_datadir}/kde4/services/plasma-wallpaper-pattern.desktop
+%{_datadir}/kde4/services/plasma-wallpaper-qml.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-virus.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-weather.desktop
 %{_datadir}/kde4/services/plasma_applet_plasmaboard.desktop
