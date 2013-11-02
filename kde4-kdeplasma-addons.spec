@@ -8,12 +8,12 @@
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
-Version:	4.10.5
+Version:	4.11.3
 Release:	1
 License:	GPL v2
 Group:		X11/Applications
 Source0:	ftp://ftp.kde.org/pub/kde/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
-# Source0-md5:	b48fee94792420a8cd8d4375c8c1db0d
+# Source0-md5:	b190eb847e42d6458c53ee88bdd9b7cd
 Patch100:	%{name}-branch.diff
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -174,6 +174,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_apodprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_epodprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_flickrprovider.so
+%attr(755,root,root) %{_libdir}/kde4/plasma_potd_natgeoprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_oseiprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_potd_wcpotdprovider.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_runner_datetime.so
@@ -229,6 +230,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/katesessions.desktop
 %{_datadir}/kde4/services/konquerorsessions.desktop
 %{_datadir}/kde4/services/konsolesessions.desktop
+%{_datadir}/kde4/services/natgeoprovider.desktop
 %{_datadir}/kde4/services/oseiprovider.desktop
 %{_datadir}/kde4/services/plasma-applet-bball.desktop
 %{_datadir}/kde4/services/plasma-applet-binaryclock.desktop
@@ -297,6 +299,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-runner-spellchecker.desktop
 %{_datadir}/kde4/services/plasma-runner-spellchecker_config.desktop
 %{_datadir}/kde4/services/plasma-runner-techbase.desktop
+%{_datadir}/kde4/services/plasma-runner-translator.desktop
 %{_datadir}/kde4/services/plasma-runner-wikipedia.desktop
 %{_datadir}/kde4/services/plasma-runner-wikitravel.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-mandelbrot.desktop
@@ -320,7 +323,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/apps/desktoptheme/default/fifteenPuzzle
 %{_datadir}/apps/desktoptheme/default/icontasks
 %{_datadir}/apps/desktoptheme/default/rssnow
-%{_iconsdir}/hicolor/scalable/actions/youtube.svgz
+%{_iconsdir}/hicolor/scalable/actions/krunner_youtube.svgz
 %{_iconsdir}/hicolor/scalable/apps/accessories-dictionary.svgz
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
 %{_iconsdir}/hicolor/scalable/apps/eyes.svgz
@@ -333,7 +336,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
 %{_iconsdir}/hicolor/*x*/apps/lifegame.png
 %{_iconsdir}/hicolor/*x*/apps/luna.png
-%{_iconsdir}/hicolor/*x*/actions/youtube.png
+%{_iconsdir}/hicolor/*x*/actions/krunner_youtube.png
 %dir %{_datadir}/apps/rssnow
 %{_datadir}/apps/rssnow/feeds
 %{_iconsdir}/*/*x*/apps/previewer.png
