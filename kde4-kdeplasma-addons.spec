@@ -4,6 +4,7 @@
 %define		orgname	    kdeplasma-addons
 %define		_state	    stable
 %define		qtver	    4.8.1
+%define		kdeworkspacever	4.11.0
 
 Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
@@ -26,8 +27,8 @@ BuildRequires:	cmake >= 2.8.0
 BuildRequires:	eigen >= 1:2.0.12-3
 BuildRequires:	glibc-misc
 BuildRequires:	ibus-devel
-BuildRequires:	kde4-kdebase-workspace-devel >= %{version}
-BuildRequires:	kde4-kdebase-workspace-kwin >= %{version}
+BuildRequires:	kde4-kdebase-workspace-devel >= %{kdeworkspacever}
+BuildRequires:	kde4-kdebase-workspace-kwin >= %{kdeworkspacever}
 BuildRequires:	kde4-kdelibs-devel >= %{version}
 BuildRequires:	kde4-kdepimlibs-devel >= %{version}
 BuildRequires:	kde4-libkexiv2-devel >= %{version}
@@ -67,7 +68,7 @@ Plazmoidy dla KDE4.
 Summary:	Lancelot Desktop Theme
 Summary(pl.UTF-8):	Motyw pulpitu Lancelot
 Group:		X11/Applications
-Requires:	kde4-kdebase-workspace >= %{version}
+Requires:	kde4-kdebase-workspace >= %{kdeworkspacever}
 
 %description lancelot
 Lancelot Desktop Theme.
@@ -80,7 +81,7 @@ Summary:	Development files for KDE4 Plasmoids
 Summary(pl.UTF-8):	Pliki nagłówkowe bibliotek plazmoidów dla KDE4
 Group:		X11/Development/Libraries
 Requires:	%{name} = %{version}-%{release}
-Requires:	kde4-kdebase-workspace-devel >= %{version}
+Requires:	kde4-kdebase-workspace-devel >= %{kdeworkspacever}
 Requires:	kde4-kdelibs-devel >= %{version}
 Requires:	kde4-kdepimlibs-devel >= %{version}
 
