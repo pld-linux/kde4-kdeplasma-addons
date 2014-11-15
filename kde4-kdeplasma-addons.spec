@@ -10,7 +10,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.14.3
-Release:	1
+Release:	2
 License:	GPL v2
 Group:		X11/Applications
 Source0:	http://download.kde.org/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
@@ -365,6 +365,8 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-qalculate.desktop
 %{_datadir}/kde4/services/plasma-dataengine-kimpanel.desktop
 %{_datadir}/kde4/services/plasma-wallpaper-potd.desktop
+
+%{_datadir}/ibus/component/kimpanel.xml
 
 %files lancelot
 %defattr(644,root,root,755)
