@@ -10,11 +10,12 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.14.3
-Release:	4
+Release:	5
 License:	GPL v2
 Group:		X11/Applications
 Source0:	http://download.kde.org/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
 # Source0-md5:	bf98d9bf1502ab4ff392fdd9b4703664
+Patch0:		timer_applet_cpu_usage_fix.patch
 Patch100:	%{name}-branch.diff
 URL:		http://www.kde.org/
 BuildRequires:	OpenGL-GLU-devel
@@ -95,6 +96,7 @@ opartych na plazmoidach dla KDE4.
 
 %prep
 %setup -q -n %{orgname}-%{version}
+%patch0 -p1
 #%patch100 -p0
 
 %build

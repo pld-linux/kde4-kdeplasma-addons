@@ -1,0 +1,29 @@
+--- kdeplasma-addons-4.14.3/applets/timer/timer.cpp.orig	2014-10-25 09:17:51.000000000 +0200
++++ kdeplasma-addons-4.14.3/applets/timer/timer.cpp	2016-03-09 22:46:25.914056980 +0100
+@@ -391,7 +391,7 @@
+ {
+     m_running = true;
+     saveTimer();
+-    setBlinking(false);
++    setDigitOpacity(1.0);
+     m_timer.start(1000);
+ 
+     m_startAction->setEnabled(false);
+@@ -403,7 +403,7 @@
+ {
+     m_running = false;
+     saveTimer();
+-    setBlinking(true);
++    setDigitOpacity(0.3);
+     m_timer.stop();
+ 
+     m_startAction->setEnabled(true);
+@@ -415,7 +415,7 @@
+ {
+     m_running = false;
+     saveTimer();
+-    setBlinking(false);
++    setDigitOpacity(1.0);
+     m_timer.stop();
+ 
+     setSeconds(m_startingSeconds);
