@@ -10,7 +10,7 @@ Summary:	KDE4 Plasmoids
 Summary(pl.UTF-8):	Plazmoidy dla KDE4
 Name:		kde4-kdeplasma-addons
 Version:	4.14.3
-Release:	6
+Release:	7
 License:	GPL v2
 Group:		X11/Applications
 Source0:	http://download.kde.org/%{_state}/%{version}/src/%{orgname}-%{version}.tar.xz
@@ -45,7 +45,7 @@ BuildRequires:	qimageblitz-devel >= 0.0.6
 BuildRequires:	qjson-devel
 BuildRequires:	qt4-build >= %{qtver}
 BuildRequires:	qt4-qmake >= %{qtver}
-BuildRequires:	qwt-devel
+#BuildRequires:	qwt-devel
 BuildRequires:	rpmbuild(macros) >= 1.600
 BuildRequires:	scim-devel
 BuildRequires:	shared-desktop-ontologies-devel >= 0.5
@@ -140,7 +140,7 @@ rm -rf $RPM_BUILD_ROOT
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_frame.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_fuzzy_clock.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_incomingmsg.so
-%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
+#%attr(755,root,root) %{_libdir}/kde4/plasma_applet_kdeobservatory.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_knowledgebase.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_kolourpicker.so
 %attr(755,root,root) %{_libdir}/kde4/plasma_applet_leavenote.so
@@ -245,7 +245,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-applet-eyes.desktop
 %{_datadir}/kde4/services/plasma-applet-fifteenPuzzle.desktop
 %{_datadir}/kde4/services/plasma-applet-incomingmsg.desktop
-%{_datadir}/kde4/services/plasma-applet-kdeobservatory.desktop
+#%{_datadir}/kde4/services/plasma-applet-kdeobservatory.desktop
 %{_datadir}/kde4/services/plasma-applet-knowledgebase.desktop
 %{_datadir}/kde4/services/plasma-applet-konqprofiles.desktop
 %{_datadir}/kde4/services/plasma-applet-konsoleprofiles.desktop
@@ -284,7 +284,7 @@ rm -rf $RPM_BUILD_ROOT
 %{_datadir}/kde4/services/plasma-dataengine-microblog.desktop
 %{_datadir}/kde4/services/plasma-runner-youtube.desktop
 %{_datadir}/kde4/services/plasma-dict-default.desktop
-%{_datadir}/kde4/services/plasma-engine-kdeobservatory.desktop
+#%{_datadir}/kde4/services/plasma-engine-kdeobservatory.desktop
 %{_datadir}/kde4/services/plasma-engine-rtm.desktop
 %{_datadir}/kde4/services/plasma-fileWatcher-default.desktop
 %{_datadir}/kde4/services/plasma-frame-default.desktop
@@ -331,12 +331,12 @@ rm -rf $RPM_BUILD_ROOT
 %{_iconsdir}/hicolor/scalable/apps/bball.svgz
 %{_iconsdir}/hicolor/scalable/apps/eyes.svgz
 %{_iconsdir}/hicolor/scalable/apps/fifteenpuzzle.svgz
-%{_iconsdir}/hicolor/scalable/apps/kdeobservatory.svgz
+#%{_iconsdir}/hicolor/scalable/apps/kdeobservatory.svgz
 %{_iconsdir}/hicolor/scalable/apps/lifegame.svgz
 %{_iconsdir}/hicolor/*x*/apps/qalculate-applet.png
 %{_iconsdir}/hicolor/*x*/apps/plasmaapplet-shelf.png
 %{_iconsdir}/hicolor/*x*/apps/eyes.png
-%{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
+#%{_iconsdir}/hicolor/*x*/apps/kdeobservatory.png
 %{_iconsdir}/hicolor/*x*/apps/lifegame.png
 %{_iconsdir}/hicolor/*x*/apps/luna.png
 %{_iconsdir}/hicolor/*x*/actions/krunner_youtube.png
